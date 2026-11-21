@@ -1,0 +1,1647 @@
+[
+  {
+    "zoho_item_id": "74630000000006013",
+    "name": "N45 SPEEDO POINTER ASSEMBLY",
+    "part_code": "COM-SPA-00018",
+    "unit": "pcs",
+    "unit_needs_review": false
+  },
+  {
+    "zoho_item_id": "74630000000006022",
+    "name": "STAR BASIC (NEW) SPEEDO POINTER ASSEMBLY - ORANGE",
+    "part_code": "COM-SPA-00021",
+    "unit": "pcs",
+    "unit_needs_review": false
+  },
+  {
+    "zoho_item_id": "74630000000006031",
+    "name": "STAR BASIC (NEW) FUEL GAUGE POINTER ASSEMBLY (U350)",
+    "part_code": "COM-SPA-00028",
+    "unit": "pcs",
+    "unit_needs_review": false
+  },
+  {
+    "zoho_item_id": "74630000000006040",
+    "name": "N45 FUEL GAUGE POINTER ASSEMBLY",
+    "part_code": "COM-SPA-00008",
+    "unit": "pcs",
+    "unit_needs_review": false
+  },
+  {
+    "zoho_item_id": "74630000000009003",
+    "name": "REML CLASSIC 350 (RED) SPEEDO POINTER",
+    "part_code": "COM-SPA-00015\n( nos x trays)",
+    "unit": "pcs",
+    "unit_needs_review": false
+  },
+  {
+    "zoho_item_id": "74630000000010001",
+    "name": "REML CLASSIC 350 ELECTRA GOLD (WHITE) SPEEDO POINTER",
+    "part_code": "COM -SPA-00016\n(150 Nos x Trays)",
+    "unit": "pcs",
+    "unit_needs_review": false
+  },
+  {
+    "zoho_item_id": "74630000000009177",
+    "name": "TVS STAR DIAL SPACER",
+    "part_code": "COM-SOP-00006",
+    "unit": "pcs",
+    "unit_needs_review": false
+  },
+  {
+    "zoho_item_id": "74630000000012173",
+    "name": "HERO HONDA TURN LENS-LH",
+    "part_code": "COM-LEN-00145LTS03",
+    "unit": "pcs",
+    "unit_needs_review": false
+  },
+  {
+    "zoho_item_id": "74630000000012182",
+    "name": "HERO HONDA TURN LENS-RH",
+    "part_code": "COM-LEN-00146RTS03",
+    "unit": "pcs",
+    "unit_needs_review": false
+  },
+  {
+    "zoho_item_id": "74630000000012415",
+    "name": "XL 100 SPEEDO POINTER",
+    "part_code": "COM-SPA-00031",
+    "unit": "pcs",
+    "unit_needs_review": false
+  },
+  {
+    "zoho_item_id": "74630000000012428",
+    "name": "XL 100 LENS (GREEN)",
+    "part_code": "COM-LEN-00160\n( nos x  pkts)",
+    "unit": "pcs",
+    "unit_needs_review": false
+  },
+  {
+    "zoho_item_id": "74630000000012437",
+    "name": "XL 100 LENS (AMBER)",
+    "part_code": "COM-LEN-00161\n( nos x  pkts)",
+    "unit": "pcs",
+    "unit_needs_review": false
+  },
+  {
+    "zoho_item_id": "74630000000012446",
+    "name": "XL 100 LENS (BLUE)",
+    "part_code": "COM-LEN-00162\n( nos x  pkts)",
+    "unit": "pcs",
+    "unit_needs_review": false
+  },
+  {
+    "zoho_item_id": "74630000000012593",
+    "name": "STAR SPEEDO POINTER ASSEMBLY (RED)",
+    "part_code": "COM-SPA-00021",
+    "unit": "pcs",
+    "unit_needs_review": false
+  },
+  {
+    "zoho_item_id": "74630000000019018",
+    "name": "NYLON HEX THREADED POST",
+    "part_code": "Product No.:NYHEXTP\nDrawing: 3731/R2 \n(    nos x    pkts)",
+    "unit": "pcs",
+    "unit_needs_review": false
+  },
+  {
+    "zoho_item_id": "74630000000022015",
+    "name": "HDPE INNER CAP SMALL",
+    "part_code": null,
+    "unit": "pcs",
+    "unit_needs_review": false
+  },
+  {
+    "zoho_item_id": "74630000000022024",
+    "name": "HDPE INNER WHITE CAP SMALL",
+    "part_code": null,
+    "unit": "pcs",
+    "unit_needs_review": false
+  },
+  {
+    "zoho_item_id": "74630000000025001",
+    "name": "UPGRADE POINTER ASSEMBLY (MAX01)",
+    "part_code": "COM-SPA-00012\n(     nos x     pkts )",
+    "unit": "pcs",
+    "unit_needs_review": false
+  },
+  {
+    "zoho_item_id": "74630000000033207",
+    "name": "TEL TALE SINGLE LED HOUSING -JUPITER",
+    "part_code": "COM-SOP-00032\n( nos x pkts)",
+    "unit": "pcs",
+    "unit_needs_review": false
+  },
+  {
+    "zoho_item_id": "74630000000033216",
+    "name": "TEL TALE DOUBLE LED HOUSING -JUPITER",
+    "part_code": "COM-SOP-00033\n( nos x pkts)",
+    "unit": "pcs",
+    "unit_needs_review": false
+  },
+  {
+    "zoho_item_id": "74630000000034001",
+    "name": "CLOSING CAP M20",
+    "part_code": "07CAP20\n( nos x pkts )",
+    "unit": "pcs",
+    "unit_needs_review": false
+  },
+  {
+    "zoho_item_id": "74630000000034010",
+    "name": "SWITCH SETTING POINTER 1007",
+    "part_code": "07SWPNW\n( nos x pkts )",
+    "unit": "pcs",
+    "unit_needs_review": false
+  },
+  {
+    "zoho_item_id": "74630000000034019",
+    "name": "BOX FOR XTR HYBRID OTI",
+    "part_code": "COPPEOT\n( nos x pkts )",
+    "unit": "pcs",
+    "unit_needs_review": false
+  },
+  {
+    "zoho_item_id": "74630000000034036",
+    "name": "BOX FOR XTR 1 HYBRID WTI",
+    "part_code": "COPPEWT\n( nos x pkts )",
+    "unit": "pcs",
+    "unit_needs_review": false
+  },
+  {
+    "zoho_item_id": "74630000000034045",
+    "name": "4 TH SWITCH CAM TYPE 2",
+    "part_code": "07SWCNB\n( nos x pkts )",
+    "unit": "pcs",
+    "unit_needs_review": false
+  },
+  {
+    "zoho_item_id": "74630000000039001",
+    "name": "REML LAMP SHADE-LPS02",
+    "part_code": "COM-SOP-00024\n( 1000 Nos X         Pkts)",
+    "unit": null,
+    "unit_needs_review": true
+  },
+  {
+    "zoho_item_id": "74630000000039010",
+    "name": "REML Classic 350 - KNOB",
+    "part_code": "COM-SOP-00015\n(1000 Pcs X    Pkts)",
+    "unit": "pcs",
+    "unit_needs_review": false
+  },
+  {
+    "zoho_item_id": "74630000000047043",
+    "name": "PLATINA DECK PLATE",
+    "part_code": "COM-SDP-00126\n(50 Pcs X      Pkts)",
+    "unit": "pcs",
+    "unit_needs_review": false
+  },
+  {
+    "zoho_item_id": "74630000000047052",
+    "name": "CT100 DECK PLATE",
+    "part_code": "COM-SDP-00125\n(50 Pcs X       Pkts)",
+    "unit": "pcs",
+    "unit_needs_review": false
+  },
+  {
+    "zoho_item_id": "74630000000047061",
+    "name": "JUPITER SPEEDO MOVEMENT SPACER",
+    "part_code": "COM-SOP-00035\n(1000 Nos X  Pkts)",
+    "unit": "pcs",
+    "unit_needs_review": false
+  },
+  {
+    "zoho_item_id": "74630000000048035",
+    "name": "Decorative Plate 2 Cavity Tool",
+    "part_code": "CAG-MND-00001",
+    "unit": null,
+    "unit_needs_review": true
+  },
+  {
+    "zoho_item_id": "74630000000048044",
+    "name": "FG Pointer CAP Mould U350 4 Cavity",
+    "part_code": "CAG-MND-00001",
+    "unit": null,
+    "unit_needs_review": true
+  },
+  {
+    "zoho_item_id": "74630000000052001",
+    "name": "RE BOSS CAP",
+    "part_code": "COM-CAP-00970\n( nos x pkts)",
+    "unit": "pcs",
+    "unit_needs_review": false
+  },
+  {
+    "zoho_item_id": "74630000000055017",
+    "name": "Yamaha Crux  Speedo Pointer Assembly",
+    "part_code": "COM- SPA-00013\n(     Nos X  Pkts)",
+    "unit": "pcs",
+    "unit_needs_review": false
+  },
+  {
+    "zoho_item_id": "74630000000055042",
+    "name": "HDPE INNER CAP BIG",
+    "part_code": null,
+    "unit": "pcs",
+    "unit_needs_review": false
+  },
+  {
+    "zoho_item_id": "74630000000055055",
+    "name": "HDPE INNER WHITE CAP BIG",
+    "part_code": null,
+    "unit": "pcs",
+    "unit_needs_review": false
+  },
+  {
+    "zoho_item_id": "74630000000056138",
+    "name": "Modified PC MA- 4701,    T.AMBER",
+    "part_code": "Mopdified PC  Maretrial Retunes",
+    "unit": "kg",
+    "unit_needs_review": false
+  },
+  {
+    "zoho_item_id": "74630000000060023",
+    "name": "REML BULLET VOM SPEEDO POINTER ASSEMBLY (BLACK)",
+    "part_code": "COM-SPA-00025",
+    "unit": "pcs",
+    "unit_needs_review": false
+  },
+  {
+    "zoho_item_id": "74630000000085043",
+    "name": "BS6 XL Lens  VSI AMBER",
+    "part_code": "COM-LEN-00167",
+    "unit": null,
+    "unit_needs_review": true
+  },
+  {
+    "zoho_item_id": "74630000000085052",
+    "name": "BS6 XL Lens HIGH BEAM BLUE",
+    "part_code": "COM-LEN-00163",
+    "unit": null,
+    "unit_needs_review": true
+  },
+  {
+    "zoho_item_id": "74630000000085061",
+    "name": "BS6 XL Lens LFI AMBER",
+    "part_code": "COM-LEN-00164",
+    "unit": null,
+    "unit_needs_review": true
+  },
+  {
+    "zoho_item_id": "74630000000085070",
+    "name": "BS6 XL Lens MIL AMBER",
+    "part_code": "COM-LEN-00165",
+    "unit": null,
+    "unit_needs_review": true
+  },
+  {
+    "zoho_item_id": "74630000000085079",
+    "name": "BS6 XL Lens TSL Green",
+    "part_code": "COM-LEN-00166",
+    "unit": null,
+    "unit_needs_review": true
+  },
+  {
+    "zoho_item_id": "74630000000088080",
+    "name": "Plastic Scrap",
+    "part_code": null,
+    "unit": "kg",
+    "unit_needs_review": false
+  },
+  {
+    "zoho_item_id": "74630000000090033",
+    "name": "Angular Movement Spacer",
+    "part_code": "COM- SOP-00009",
+    "unit": null,
+    "unit_needs_review": true
+  },
+  {
+    "zoho_item_id": "74630000000095074",
+    "name": "Insert Moulding Tool",
+    "part_code": null,
+    "unit": null,
+    "unit_needs_review": true
+  },
+  {
+    "zoho_item_id": "74630000000095083",
+    "name": "SIde Core Moulding Tool",
+    "part_code": null,
+    "unit": null,
+    "unit_needs_review": true
+  },
+  {
+    "zoho_item_id": "74630000000104003",
+    "name": "PC AMBER MATERIAL",
+    "part_code": null,
+    "unit": "kg",
+    "unit_needs_review": false
+  },
+  {
+    "zoho_item_id": "74630000000108027",
+    "name": "XL GREEN NEW TOOL COMPONENT",
+    "part_code": "( Nos x Pkts)",
+    "unit": "pcs",
+    "unit_needs_review": false
+  },
+  {
+    "zoho_item_id": "74630000000109041",
+    "name": "PC Green Material",
+    "part_code": null,
+    "unit": "kg",
+    "unit_needs_review": false
+  },
+  {
+    "zoho_item_id": "74630000000129061",
+    "name": "BS6 D2 Material Cavity Plate",
+    "part_code": "Sparking",
+    "unit": null,
+    "unit_needs_review": true
+  },
+  {
+    "zoho_item_id": "74630000000136018",
+    "name": "INK and Thinner",
+    "part_code": null,
+    "unit": null,
+    "unit_needs_review": true
+  },
+  {
+    "zoho_item_id": "74630000000137078",
+    "name": "PC Blue",
+    "part_code": null,
+    "unit": null,
+    "unit_needs_review": true
+  },
+  {
+    "zoho_item_id": "74630000000144109",
+    "name": "Rubber plug for top entry",
+    "part_code": "05RUBPT\n1005 / 1007\nDrawing D 999",
+    "unit": null,
+    "unit_needs_review": true
+  },
+  {
+    "zoho_item_id": "74630000000144134",
+    "name": "Jig / Rubber / Development chgs/ Plate",
+    "part_code": null,
+    "unit": null,
+    "unit_needs_review": true
+  },
+  {
+    "zoho_item_id": "74630000000177001",
+    "name": "MP Needle Cap Tool",
+    "part_code": null,
+    "unit": "pcs",
+    "unit_needs_review": false
+  },
+  {
+    "zoho_item_id": "74630000000178046",
+    "name": "MP NEEDLE CAP 1078",
+    "part_code": "78MPNCA",
+    "unit": "pcs",
+    "unit_needs_review": false
+  },
+  {
+    "zoho_item_id": "74630000000200013",
+    "name": "Jupiter BS6 Teltale  Tool 4 Cavities",
+    "part_code": "CAG-MND-00001",
+    "unit": null,
+    "unit_needs_review": true
+  },
+  {
+    "zoho_item_id": "74630000000213019",
+    "name": "ETCHING PLATE 215x100x10 mm INDUS",
+    "part_code": "PART No PRNME003",
+    "unit": null,
+    "unit_needs_review": true
+  },
+  {
+    "zoho_item_id": "74630000000213030",
+    "name": "PAD SILICON SP-316 SPINKS",
+    "part_code": "PRNME004",
+    "unit": null,
+    "unit_needs_review": true
+  },
+  {
+    "zoho_item_id": "74630000000220025",
+    "name": "Indicator shafft Guide 1078",
+    "part_code": "Product Nbr 78INDSG\nDrawing No 1078/04/R1",
+    "unit": "pcs",
+    "unit_needs_review": false
+  },
+  {
+    "zoho_item_id": "74630000000222016",
+    "name": "BS6 Lens Tool - 8 Cavity",
+    "part_code": "LENS Tool  - 3 Amber Color, 1 Green, 1 Blue-",
+    "unit": null,
+    "unit_needs_review": true
+  },
+  {
+    "zoho_item_id": "74630000000236078",
+    "name": "FAMILY TOOL  1 DK",
+    "part_code": "Contain 2 Models-\nPart-kmt_10_034 rev 6\nand \nPaft-kmt_10_058Handle front_rev5",
+    "unit": null,
+    "unit_needs_review": true
+  },
+  {
+    "zoho_item_id": "74630000000236087",
+    "name": "FAMILY TOOL  2 DK",
+    "part_code": "KMT_10_061 _pin_hole_rev5\nKMT_10_056_ Spacer_rev4\nKMT_10_060_lock_bearing_rev3\nKMT_10_067_doorspacer_lock_rev3\nDia 8.5 _bushing_rev3",
+    "unit": null,
+    "unit_needs_review": true
+  },
+  {
+    "zoho_item_id": "74630000000272001",
+    "name": "Body Nylon M28RC",
+    "part_code": null,
+    "unit": null,
+    "unit_needs_review": true
+  },
+  {
+    "zoho_item_id": "74630000000272014",
+    "name": "Cap Insert M28RC",
+    "part_code": "A 816-01- WIth Brass Insert",
+    "unit": "pcs",
+    "unit_needs_review": false
+  },
+  {
+    "zoho_item_id": "74630000000272023",
+    "name": "Tool correction  charges",
+    "part_code": null,
+    "unit": null,
+    "unit_needs_review": true
+  },
+  {
+    "zoho_item_id": "74630000000283022",
+    "name": "SCREW BARREL SET",
+    "part_code": null,
+    "unit": null,
+    "unit_needs_review": true
+  },
+  {
+    "zoho_item_id": "74630000000307071",
+    "name": "Rubber plug for entry tool",
+    "part_code": null,
+    "unit": null,
+    "unit_needs_review": true
+  },
+  {
+    "zoho_item_id": "74630000000308001",
+    "name": "BS6 JUPITER  DOUBLE LED",
+    "part_code": "COM-SOP-00038",
+    "unit": null,
+    "unit_needs_review": true
+  },
+  {
+    "zoho_item_id": "74630000000308010",
+    "name": "BS6 JUPITER TRIPLE LED",
+    "part_code": "COM-SOP-00039",
+    "unit": null,
+    "unit_needs_review": true
+  },
+  {
+    "zoho_item_id": "74630000000308109",
+    "name": "B1 Flat diffuser",
+    "part_code": "Nos x Bundles",
+    "unit": "pcs",
+    "unit_needs_review": false
+  },
+  {
+    "zoho_item_id": "74630000000349043",
+    "name": "TVS STAR CITY ECR Fuel gauge Pointer Assy",
+    "part_code": "COM-SPA-00007",
+    "unit": null,
+    "unit_needs_review": true
+  },
+  {
+    "zoho_item_id": "74630000000352017",
+    "name": "L / M / N  FLAT DIFFUSER",
+    "part_code": "SIze 570 X 90.5 mm",
+    "unit": null,
+    "unit_needs_review": true
+  },
+  {
+    "zoho_item_id": "74630000000352026",
+    "name": "D1 Flat DIFFUSER",
+    "part_code": "SIZE 232 x 36.65 mm",
+    "unit": null,
+    "unit_needs_review": true
+  },
+  {
+    "zoho_item_id": "74630000000375011",
+    "name": "RE BOSS CAP M18",
+    "part_code": "COM -CAP-01099",
+    "unit": null,
+    "unit_needs_review": true
+  },
+  {
+    "zoho_item_id": "74630000000389005",
+    "name": "KMT_10_034 _Handle Grib _rev7",
+    "part_code": null,
+    "unit": "pcs",
+    "unit_needs_review": false
+  },
+  {
+    "zoho_item_id": "74630000000389018",
+    "name": "KMT_10_058_Handle front_rev5",
+    "part_code": null,
+    "unit": "pcs",
+    "unit_needs_review": false
+  },
+  {
+    "zoho_item_id": "74630000000389031",
+    "name": "KMT_10_061_pin _hole_rev6",
+    "part_code": null,
+    "unit": "pcs",
+    "unit_needs_review": false
+  },
+  {
+    "zoho_item_id": "74630000000389040",
+    "name": "KMT_10_056_ spacer_rev4",
+    "part_code": null,
+    "unit": "pcs",
+    "unit_needs_review": false
+  },
+  {
+    "zoho_item_id": "74630000000389065",
+    "name": "KMT_10_060_lock_bearing_rev3",
+    "part_code": null,
+    "unit": "pcs",
+    "unit_needs_review": false
+  },
+  {
+    "zoho_item_id": "74630000000389074",
+    "name": "KMT_10_067_doorspacer_lock_rev3",
+    "part_code": null,
+    "unit": "pcs",
+    "unit_needs_review": false
+  },
+  {
+    "zoho_item_id": "74630000000389083",
+    "name": "Dia 8.5_Bushing_rev3",
+    "part_code": null,
+    "unit": "pcs",
+    "unit_needs_review": false
+  },
+  {
+    "zoho_item_id": "74630000000416001",
+    "name": "PPCP",
+    "part_code": "RAW-POL-00063",
+    "unit": "kg",
+    "unit_needs_review": false
+  },
+  {
+    "zoho_item_id": "74630000000420001",
+    "name": "POLYCARBONATE  L AMBER",
+    "part_code": null,
+    "unit": "kg",
+    "unit_needs_review": false
+  },
+  {
+    "zoho_item_id": "74630000000440029",
+    "name": "PBT  HOUSING I TYPE LED",
+    "part_code": null,
+    "unit": null,
+    "unit_needs_review": true
+  },
+  {
+    "zoho_item_id": "74630000000442001",
+    "name": "PBT H1TYPE PCB Housing Bottom White",
+    "part_code": null,
+    "unit": null,
+    "unit_needs_review": true
+  },
+  {
+    "zoho_item_id": "74630000000442010",
+    "name": "PBT H1 TYPE PCB Housing Top Cover Red",
+    "part_code": null,
+    "unit": null,
+    "unit_needs_review": true
+  },
+  {
+    "zoho_item_id": "74630000000442023",
+    "name": "H1 PBT Bracket Assembly Complete",
+    "part_code": null,
+    "unit": null,
+    "unit_needs_review": true
+  },
+  {
+    "zoho_item_id": "74630000000442032",
+    "name": "TYPE  I Lens",
+    "part_code": null,
+    "unit": null,
+    "unit_needs_review": true
+  },
+  {
+    "zoho_item_id": "74630000000442041",
+    "name": "TYPE F Lens",
+    "part_code": null,
+    "unit": null,
+    "unit_needs_review": true
+  },
+  {
+    "zoho_item_id": "74630000000443001",
+    "name": "MovementHolding Plate PP 3 MM",
+    "part_code": "CAG-CRT-00001",
+    "unit": null,
+    "unit_needs_review": true
+  },
+  {
+    "zoho_item_id": "74630000000521036",
+    "name": "Nylon Black Tape 1\"",
+    "part_code": "50 Mtrs x 1 Roll",
+    "unit": null,
+    "unit_needs_review": true
+  },
+  {
+    "zoho_item_id": "74630000000532021",
+    "name": "Circular Diffuser 165 Dia",
+    "part_code": null,
+    "unit": "pcs",
+    "unit_needs_review": false
+  },
+  {
+    "zoho_item_id": "74630000000534055",
+    "name": "PCB Housing- PBT White",
+    "part_code": null,
+    "unit": "pcs",
+    "unit_needs_review": false
+  },
+  {
+    "zoho_item_id": "74630000000534064",
+    "name": "TOP cover for PCB housing",
+    "part_code": null,
+    "unit": "pcs",
+    "unit_needs_review": false
+  },
+  {
+    "zoho_item_id": "74630000000534073",
+    "name": "Fibre reinforced plastic Bracket Assy- H1",
+    "part_code": null,
+    "unit": "pcs",
+    "unit_needs_review": false
+  },
+  {
+    "zoho_item_id": "74630000000534082",
+    "name": "LED circuit Module- PBT Housing I Type",
+    "part_code": null,
+    "unit": "pcs",
+    "unit_needs_review": false
+  },
+  {
+    "zoho_item_id": "74630000000534091",
+    "name": "suitable Lens for LED COB- PC Clear Lens",
+    "part_code": null,
+    "unit": "pcs",
+    "unit_needs_review": false
+  },
+  {
+    "zoho_item_id": "74630000000534100",
+    "name": "Lens  PC Red",
+    "part_code": null,
+    "unit": "pcs",
+    "unit_needs_review": false
+  },
+  {
+    "zoho_item_id": "74630000000547034",
+    "name": "Infino PC Natural  LT 1100 P",
+    "part_code": null,
+    "unit": null,
+    "unit_needs_review": true
+  },
+  {
+    "zoho_item_id": "74630000000570019",
+    "name": "Tool PIN HOLE",
+    "part_code": "PIN HOLE",
+    "unit": null,
+    "unit_needs_review": true
+  },
+  {
+    "zoho_item_id": "74630000000570028",
+    "name": "Handle Front",
+    "part_code": null,
+    "unit": null,
+    "unit_needs_review": true
+  },
+  {
+    "zoho_item_id": "74630000000570037",
+    "name": "Dia 8.5  BushTool",
+    "part_code": null,
+    "unit": null,
+    "unit_needs_review": true
+  },
+  {
+    "zoho_item_id": "74630000000603003",
+    "name": "SWITCH COVER NYLON 1005A",
+    "part_code": "Drawing :3513/R4/P3",
+    "unit": null,
+    "unit_needs_review": true
+  },
+  {
+    "zoho_item_id": "74630000000603012",
+    "name": "Switch Cover Nylon 1007",
+    "part_code": "DRAWING 1007/10/R3/P1",
+    "unit": "pcs",
+    "unit_needs_review": false
+  },
+  {
+    "zoho_item_id": "74630000000629003",
+    "name": "Splender Pro Upper Tool",
+    "part_code": "CAG-MND-00001",
+    "unit": "pcs",
+    "unit_needs_review": false
+  },
+  {
+    "zoho_item_id": "74630000000647001",
+    "name": "DEV- SPEEDO Pointer",
+    "part_code": "COM-SPA-00033",
+    "unit": "pcs",
+    "unit_needs_review": false
+  },
+  {
+    "zoho_item_id": "74630000000647010",
+    "name": "DEV- Gauge Pointer",
+    "part_code": "COM-SPA-00034",
+    "unit": "pcs",
+    "unit_needs_review": false
+  },
+  {
+    "zoho_item_id": "74630000000654021",
+    "name": "Splendor Pro  Lens LH",
+    "part_code": "COM-LEN-00171",
+    "unit": "pcs",
+    "unit_needs_review": false
+  },
+  {
+    "zoho_item_id": "74630000000654030",
+    "name": "Splendor Pro Lens RH",
+    "part_code": "COM-LEN-00172",
+    "unit": "pcs",
+    "unit_needs_review": false
+  },
+  {
+    "zoho_item_id": "74630000000677001",
+    "name": "Pad Printing Machine",
+    "part_code": null,
+    "unit": "pcs",
+    "unit_needs_review": false
+  },
+  {
+    "zoho_item_id": "74630000000681037",
+    "name": "Switch Cover Nylon S3",
+    "part_code": "Drawing 07SCNS3",
+    "unit": "pcs",
+    "unit_needs_review": false
+  },
+  {
+    "zoho_item_id": "74630000000699029",
+    "name": "DEV- Dial Holder VST",
+    "part_code": "COM-CLA-00044",
+    "unit": "pcs",
+    "unit_needs_review": false
+  },
+  {
+    "zoho_item_id": "74630000000721001",
+    "name": "JUPITER BS6 TELTALE SIDE STAND TOOL",
+    "part_code": null,
+    "unit": "pcs",
+    "unit_needs_review": false
+  },
+  {
+    "zoho_item_id": "74630000000722001",
+    "name": "Body Top Cap",
+    "part_code": "Nylon 66 30% GF Grey",
+    "unit": "pcs",
+    "unit_needs_review": false
+  },
+  {
+    "zoho_item_id": "74630000000723034",
+    "name": "Pointer Leaf REML",
+    "part_code": null,
+    "unit": "pcs",
+    "unit_needs_review": false
+  },
+  {
+    "zoho_item_id": "74630000000748029",
+    "name": "Oil",
+    "part_code": null,
+    "unit": null,
+    "unit_needs_review": true
+  },
+  {
+    "zoho_item_id": "74630000000761003",
+    "name": "GUIDE WIRE E CLIP 3 MM",
+    "part_code": null,
+    "unit": null,
+    "unit_needs_review": true
+  },
+  {
+    "zoho_item_id": "74630000000761012",
+    "name": "GUIDE WIRE  E CLIP 4 MM",
+    "part_code": null,
+    "unit": null,
+    "unit_needs_review": true
+  },
+  {
+    "zoho_item_id": "74630000000761021",
+    "name": "GUIDE WIRE FRONT CLIP",
+    "part_code": null,
+    "unit": null,
+    "unit_needs_review": true
+  },
+  {
+    "zoho_item_id": "74630000000761030",
+    "name": "BRAIDED SHAFT CAP BLUE",
+    "part_code": null,
+    "unit": null,
+    "unit_needs_review": true
+  },
+  {
+    "zoho_item_id": "74630000000786034",
+    "name": "LUER Cap Tool",
+    "part_code": null,
+    "unit": "pcs",
+    "unit_needs_review": false
+  },
+  {
+    "zoho_item_id": "74630000000797001",
+    "name": "Speedo Pointer Assy CT 100/Platina",
+    "part_code": "COM-SPA-00027\n(500 Nos X  ....Pkts)",
+    "unit": "pcs",
+    "unit_needs_review": false
+  },
+  {
+    "zoho_item_id": "74630000000807003",
+    "name": "PILICON Nozzle 8.5 Black",
+    "part_code": null,
+    "unit": "pcs",
+    "unit_needs_review": false
+  },
+  {
+    "zoho_item_id": "74630000000807012",
+    "name": "PILICON Nozzle 10 Red",
+    "part_code": null,
+    "unit": "pcs",
+    "unit_needs_review": false
+  },
+  {
+    "zoho_item_id": "74630000000807025",
+    "name": "Suction Nozzle   5.8 Black",
+    "part_code": null,
+    "unit": "pcs",
+    "unit_needs_review": false
+  },
+  {
+    "zoho_item_id": "74630000000807034",
+    "name": "Suction Nozzle 6.3 RED",
+    "part_code": null,
+    "unit": "pcs",
+    "unit_needs_review": false
+  },
+  {
+    "zoho_item_id": "74630000000807047",
+    "name": "Bottom Black",
+    "part_code": null,
+    "unit": "pcs",
+    "unit_needs_review": false
+  },
+  {
+    "zoho_item_id": "74630000000809011",
+    "name": "PILICON Nozzle RED -Tool 10 mm",
+    "part_code": "INSERT Tool",
+    "unit": "pcs",
+    "unit_needs_review": false
+  },
+  {
+    "zoho_item_id": "74630000000812001",
+    "name": "Jupiter BS6 Light guide with Stand Component",
+    "part_code": "PPTF --\nCOM-",
+    "unit": "pcs",
+    "unit_needs_review": false
+  },
+  {
+    "zoho_item_id": "74630000000822083",
+    "name": "Pointer Rework M/c Tool",
+    "part_code": null,
+    "unit": null,
+    "unit_needs_review": true
+  },
+  {
+    "zoho_item_id": "74630000000824017",
+    "name": "PRICE DIFFERNCE",
+    "part_code": null,
+    "unit": null,
+    "unit_needs_review": true
+  },
+  {
+    "zoho_item_id": "74630000000850003",
+    "name": "25 Pointer Leaf Orange RAL3028L2",
+    "part_code": null,
+    "unit": null,
+    "unit_needs_review": true
+  },
+  {
+    "zoho_item_id": "74630000000856005",
+    "name": "02 Pointer Leaf  Orange RAL 3028 L2",
+    "part_code": "Job work",
+    "unit": "pcs",
+    "unit_needs_review": false
+  },
+  {
+    "zoho_item_id": "74630000000863001",
+    "name": "25 Pointer Leaf White Duco Reget",
+    "part_code": null,
+    "unit": "pcs",
+    "unit_needs_review": false
+  },
+  {
+    "zoho_item_id": "74630000000867001",
+    "name": "Front Cover Tool",
+    "part_code": "Prototype Tool\nCAG-MND-00001",
+    "unit": "pcs",
+    "unit_needs_review": false
+  },
+  {
+    "zoho_item_id": "74630000000867010",
+    "name": "SNAP FIT Tool",
+    "part_code": "Prototype Tool\nCAG-MND-00001",
+    "unit": "pcs",
+    "unit_needs_review": false
+  },
+  {
+    "zoho_item_id": "74630000000892025",
+    "name": "STAR ASIC (NEW) FUEL GAUGE POINTER ASSEMBLY-(U350) VA / VE",
+    "part_code": "COM-SPA-00035\n(1000 Nos  X ..... PKts)",
+    "unit": "pcs",
+    "unit_needs_review": false
+  },
+  {
+    "zoho_item_id": "74630000000893103",
+    "name": "Umbilical cord Clamp",
+    "part_code": null,
+    "unit": "pcs",
+    "unit_needs_review": false
+  },
+  {
+    "zoho_item_id": "74630000000893112",
+    "name": "RED CLIP",
+    "part_code": null,
+    "unit": "pcs",
+    "unit_needs_review": false
+  },
+  {
+    "zoho_item_id": "74630000000893125",
+    "name": "J Closer",
+    "part_code": null,
+    "unit": "pcs",
+    "unit_needs_review": false
+  },
+  {
+    "zoho_item_id": "74630000000894087",
+    "name": "PC CLEAR FLAT -SSPL",
+    "part_code": "With the Material-Sabic",
+    "unit": "pcs",
+    "unit_needs_review": false
+  },
+  {
+    "zoho_item_id": "74630000000894096",
+    "name": "PC RED FLAT- SSPL",
+    "part_code": "WITH THE MATERIAL",
+    "unit": "pcs",
+    "unit_needs_review": false
+  },
+  {
+    "zoho_item_id": "74630000000894105",
+    "name": "Trial charges-Hand Tool -4 Trials",
+    "part_code": null,
+    "unit": "m",
+    "unit_needs_review": false
+  },
+  {
+    "zoho_item_id": "74630000000898001",
+    "name": "Suction Nozzle  Tool -",
+    "part_code": null,
+    "unit": "pcs",
+    "unit_needs_review": false
+  },
+  {
+    "zoho_item_id": "74630000000912003",
+    "name": "MS Ring 52 Dia",
+    "part_code": null,
+    "unit": "pcs",
+    "unit_needs_review": false
+  },
+  {
+    "zoho_item_id": "74630000000912012",
+    "name": "SS Ring 52 Dia",
+    "part_code": null,
+    "unit": "pcs",
+    "unit_needs_review": false
+  },
+  {
+    "zoho_item_id": "74630000000912021",
+    "name": "Red Pointer Samyuktha",
+    "part_code": null,
+    "unit": "pcs",
+    "unit_needs_review": false
+  },
+  {
+    "zoho_item_id": "74630000000912036",
+    "name": "Brass ring Flat Big",
+    "part_code": null,
+    "unit": "pcs",
+    "unit_needs_review": false
+  },
+  {
+    "zoho_item_id": "74630000000938033",
+    "name": "Ti Celestia Single cavity LH & RH family Tool",
+    "part_code": "Family tool",
+    "unit": "pcs",
+    "unit_needs_review": false
+  },
+  {
+    "zoho_item_id": "74630000000944051",
+    "name": "Philips carbon Powder",
+    "part_code": null,
+    "unit": "kg",
+    "unit_needs_review": false
+  },
+  {
+    "zoho_item_id": "74630000000958023",
+    "name": "TVS Jupiter ZX 4 Cavity Plunger Inj. Moulding Tool",
+    "part_code": "CAG-MND-00001",
+    "unit": "pcs",
+    "unit_needs_review": false
+  },
+  {
+    "zoho_item_id": "74630000000958036",
+    "name": "TVS Jupiter ZX 2 Cavity Lenses LH & RH Family Inj Moulding Tool",
+    "part_code": "CAG-MND-00001",
+    "unit": "pcs",
+    "unit_needs_review": false
+  },
+  {
+    "zoho_item_id": "74630000000974028",
+    "name": "Patch Test Component",
+    "part_code": null,
+    "unit": "pcs",
+    "unit_needs_review": false
+  },
+  {
+    "zoho_item_id": "74630000000986035",
+    "name": "Pusher CAP Medium K",
+    "part_code": null,
+    "unit": null,
+    "unit_needs_review": true
+  },
+  {
+    "zoho_item_id": "74630000000991001",
+    "name": "OPTO COUPLER HOUSING-REV-B",
+    "part_code": "COM-HSG-00052",
+    "unit": "pcs",
+    "unit_needs_review": false
+  },
+  {
+    "zoho_item_id": "74630000000994003",
+    "name": "Colour -M Development Charges",
+    "part_code": null,
+    "unit": "kg",
+    "unit_needs_review": false
+  },
+  {
+    "zoho_item_id": "74630000001005003",
+    "name": "Opto coupler Housing Proto Tool",
+    "part_code": "COM-HSG-00052",
+    "unit": "pcs",
+    "unit_needs_review": false
+  },
+  {
+    "zoho_item_id": "74630000001006019",
+    "name": "Jupiter ZX Plunger 31",
+    "part_code": "COM-KNB-00133",
+    "unit": "pcs",
+    "unit_needs_review": false
+  },
+  {
+    "zoho_item_id": "74630000001006028",
+    "name": "Supra 2.0 Plunger 24",
+    "part_code": "COM-",
+    "unit": "pcs",
+    "unit_needs_review": false
+  },
+  {
+    "zoho_item_id": "74630000001008003",
+    "name": "Ureteral Adaptor POLY and ABS",
+    "part_code": "U/c Adaptor --Poly\nU/c Adaptor --ABS",
+    "unit": "pcs",
+    "unit_needs_review": false
+  },
+  {
+    "zoho_item_id": "74630000001013001",
+    "name": "Opto coupler Housing component -REV B New",
+    "part_code": "COM-HSG- 00052 New",
+    "unit": "pcs",
+    "unit_needs_review": false
+  },
+  {
+    "zoho_item_id": "74630000001013085",
+    "name": "White Pointer- Samyuktha",
+    "part_code": "Samyuktha",
+    "unit": "pcs",
+    "unit_needs_review": false
+  },
+  {
+    "zoho_item_id": "74630000001017047",
+    "name": "Jupiter Indicator Lens - LH",
+    "part_code": "COM-LEN-00173",
+    "unit": "pcs",
+    "unit_needs_review": false
+  },
+  {
+    "zoho_item_id": "74630000001017056",
+    "name": "Jupiter Lens - RH",
+    "part_code": "COM-LEN-00174",
+    "unit": "pcs",
+    "unit_needs_review": false
+  },
+  {
+    "zoho_item_id": "74630000001024023",
+    "name": "PlungerClip- SLA",
+    "part_code": null,
+    "unit": "pcs",
+    "unit_needs_review": false
+  },
+  {
+    "zoho_item_id": "74630000001024032",
+    "name": "Motor Clip-SLA",
+    "part_code": null,
+    "unit": "pcs",
+    "unit_needs_review": false
+  },
+  {
+    "zoho_item_id": "74630000001038036",
+    "name": "Pinion _10T - SLA",
+    "part_code": null,
+    "unit": "pcs",
+    "unit_needs_review": false
+  },
+  {
+    "zoho_item_id": "74630000001038045",
+    "name": "Casing Prod- SLA",
+    "part_code": null,
+    "unit": "pcs",
+    "unit_needs_review": false
+  },
+  {
+    "zoho_item_id": "74630000001038054",
+    "name": "Plunger New-SLA",
+    "part_code": null,
+    "unit": "pcs",
+    "unit_needs_review": false
+  },
+  {
+    "zoho_item_id": "74630000001038071",
+    "name": "TOP COVER-SLA",
+    "part_code": null,
+    "unit": "pcs",
+    "unit_needs_review": false
+  },
+  {
+    "zoho_item_id": "74630000001038080",
+    "name": "Rack_New-SLA",
+    "part_code": null,
+    "unit": "pcs",
+    "unit_needs_review": false
+  },
+  {
+    "zoho_item_id": "74630000001049001",
+    "name": "RH-LEVER 2",
+    "part_code": null,
+    "unit": "pcs",
+    "unit_needs_review": false
+  },
+  {
+    "zoho_item_id": "74630000001049010",
+    "name": "RH-BRACKET 2",
+    "part_code": null,
+    "unit": "pcs",
+    "unit_needs_review": false
+  },
+  {
+    "zoho_item_id": "74630000001053049",
+    "name": "Honda Activa Speedo Pointer",
+    "part_code": "COM-SPA-00017",
+    "unit": "pcs",
+    "unit_needs_review": false
+  },
+  {
+    "zoho_item_id": "74630000001053076",
+    "name": "U 349C VA/ VE Spacer",
+    "part_code": "COM-SOP-00049",
+    "unit": "pcs",
+    "unit_needs_review": false
+  },
+  {
+    "zoho_item_id": "74630000001069059",
+    "name": "Ti Celestia Light Guide LH",
+    "part_code": "COM-SOP-00046",
+    "unit": "pcs",
+    "unit_needs_review": false
+  },
+  {
+    "zoho_item_id": "74630000001069068",
+    "name": "Ti Celestia Light Guide RH",
+    "part_code": "COM-SOP- 00047",
+    "unit": "pcs",
+    "unit_needs_review": false
+  },
+  {
+    "zoho_item_id": "74630000001074025",
+    "name": "HONDA ACTIVA CAP TOOL - 4 CAVITY",
+    "part_code": null,
+    "unit": "pcs",
+    "unit_needs_review": false
+  },
+  {
+    "zoho_item_id": "74630000001074034",
+    "name": "HONDA ACTIVA LEAF TOOL - 4 CAVITY",
+    "part_code": null,
+    "unit": "pcs",
+    "unit_needs_review": false
+  },
+  {
+    "zoho_item_id": "74630000001074043",
+    "name": "OPTO COUPLER COVER REV-B  ( OLA )-",
+    "part_code": "COM-HSG- 00052\nPRODUCTION TOOL -4 CAVITIES",
+    "unit": "pcs",
+    "unit_needs_review": false
+  },
+  {
+    "zoho_item_id": "74630000001074052",
+    "name": "U 349 C VA / VE SPACER 4 CAVITY TOOL",
+    "part_code": null,
+    "unit": "pcs",
+    "unit_needs_review": false
+  },
+  {
+    "zoho_item_id": "74630000001080139",
+    "name": "Part_192-SLA",
+    "part_code": null,
+    "unit": "pcs",
+    "unit_needs_review": false
+  },
+  {
+    "zoho_item_id": "74630000001080158",
+    "name": "Key Set_top body",
+    "part_code": null,
+    "unit": "pcs",
+    "unit_needs_review": false
+  },
+  {
+    "zoho_item_id": "74630000001080175",
+    "name": "Key Set_rubber bush",
+    "part_code": null,
+    "unit": "pcs",
+    "unit_needs_review": false
+  },
+  {
+    "zoho_item_id": "74630000001080192",
+    "name": "Key Set_inner body",
+    "part_code": null,
+    "unit": "pcs",
+    "unit_needs_review": false
+  },
+  {
+    "zoho_item_id": "74630000001080209",
+    "name": "Key Set_bottom body",
+    "part_code": null,
+    "unit": "pcs",
+    "unit_needs_review": false
+  },
+  {
+    "zoho_item_id": "74630000001085021",
+    "name": "Abutment -MC 979",
+    "part_code": "MC 979 Rev A",
+    "unit": "pcs",
+    "unit_needs_review": false
+  },
+  {
+    "zoho_item_id": "74630000001091017",
+    "name": "SLA Printed Pointer",
+    "part_code": "CAD Development Charges +\n3D Printing +\nPost Processing",
+    "unit": "pcs",
+    "unit_needs_review": false
+  },
+  {
+    "zoho_item_id": "74630000001094082",
+    "name": "Silicone Mold for Resin Art 8\"",
+    "part_code": null,
+    "unit": null,
+    "unit_needs_review": true
+  },
+  {
+    "zoho_item_id": "74630000001094093",
+    "name": "Silicone mold for Resin Art 4\"",
+    "part_code": null,
+    "unit": null,
+    "unit_needs_review": true
+  },
+  {
+    "zoho_item_id": "74630000001095063",
+    "name": "Plunger Body- MS",
+    "part_code": "COM-PLG-00003",
+    "unit": "pcs",
+    "unit_needs_review": false
+  },
+  {
+    "zoho_item_id": "74630000001095072",
+    "name": "Plunger  Body- MS New",
+    "part_code": "COM-PLG-00003",
+    "unit": "pcs",
+    "unit_needs_review": false
+  },
+  {
+    "zoho_item_id": "74630000001111001",
+    "name": "Honda Activa FG pointer",
+    "part_code": "COM-SPA-00005",
+    "unit": "pcs",
+    "unit_needs_review": false
+  },
+  {
+    "zoho_item_id": "74630000001112030",
+    "name": "MC979 WITTE Proto Type Tool",
+    "part_code": "RNM-TLS-00001",
+    "unit": "pcs",
+    "unit_needs_review": false
+  },
+  {
+    "zoho_item_id": "74630000001132001",
+    "name": "Wing Type Hub 3D Printed",
+    "part_code": null,
+    "unit": null,
+    "unit_needs_review": true
+  },
+  {
+    "zoho_item_id": "74630000001132010",
+    "name": "Funnel Type Hub 3D Printed",
+    "part_code": null,
+    "unit": null,
+    "unit_needs_review": true
+  },
+  {
+    "zoho_item_id": "74630000001137001",
+    "name": "Silicone Mold",
+    "part_code": null,
+    "unit": "pcs",
+    "unit_needs_review": false
+  },
+  {
+    "zoho_item_id": "74630000001144034",
+    "name": "Soil Sensor 3D Printed",
+    "part_code": null,
+    "unit": null,
+    "unit_needs_review": true
+  },
+  {
+    "zoho_item_id": "74630000001169001",
+    "name": "U 349C VA/VE Speedo Pointer Assy- RED (7.5 mm L )",
+    "part_code": "COM-SPA-00038\n( 500 Nos X 4 Pkts)",
+    "unit": "pcs",
+    "unit_needs_review": false
+  },
+  {
+    "zoho_item_id": "74630000001199017",
+    "name": "U 349 C VA / VE Speedo Movement Spacer",
+    "part_code": "COM-SOP-00049\n( 1000 Nos X ...... Pkts)",
+    "unit": "pcs",
+    "unit_needs_review": false
+  },
+  {
+    "zoho_item_id": "74630000001207061",
+    "name": "Opto Coupler Cover-- REV : C",
+    "part_code": "COM- HSG- 00052\n( .......... Nos X  ....... Pkts)",
+    "unit": "pcs",
+    "unit_needs_review": false
+  },
+  {
+    "zoho_item_id": "74630000001208001",
+    "name": "4 Cavity tool with Split",
+    "part_code": "SPN-MNT-00005",
+    "unit": null,
+    "unit_needs_review": true
+  },
+  {
+    "zoho_item_id": "74630000001210023",
+    "name": "02 Pointer Leaf Duco Regent",
+    "part_code": null,
+    "unit": "pcs",
+    "unit_needs_review": false
+  },
+  {
+    "zoho_item_id": "74630000001224084",
+    "name": "Pointer 60 Dia PR 55006-S - WHITE",
+    "part_code": "( 1000 Nos X         Pkts)",
+    "unit": "pcs",
+    "unit_needs_review": false
+  },
+  {
+    "zoho_item_id": "74630000001243001",
+    "name": "Pointer 52 Dia  PR 55004 White",
+    "part_code": "( 1000 Nos x      Pkt)",
+    "unit": "pcs",
+    "unit_needs_review": false
+  },
+  {
+    "zoho_item_id": "74630000001248057",
+    "name": "Membrane Filter Cap",
+    "part_code": null,
+    "unit": "pcs",
+    "unit_needs_review": false
+  },
+  {
+    "zoho_item_id": "74630000001288021",
+    "name": "U 349 C VA/VE Speedo Cap 8 Cavity Tool",
+    "part_code": null,
+    "unit": "pcs",
+    "unit_needs_review": false
+  },
+  {
+    "zoho_item_id": "74630000001290027",
+    "name": "Pilot 68 Gun",
+    "part_code": null,
+    "unit": "pcs",
+    "unit_needs_review": false
+  },
+  {
+    "zoho_item_id": "74630000001312017",
+    "name": "U 279 C Pointer Proto tool Cap and Counter part Each Single cavity",
+    "part_code": "CAG-MND-00001",
+    "unit": "pcs",
+    "unit_needs_review": false
+  },
+  {
+    "zoho_item_id": "74630000001312026",
+    "name": "U 279 C Proto Tool Pointer Leaf Speedo and FG single cavity each",
+    "part_code": "CAG-MND -00001",
+    "unit": "pcs",
+    "unit_needs_review": false
+  },
+  {
+    "zoho_item_id": "74630000001319001",
+    "name": "Decorative Plate",
+    "part_code": "RPT",
+    "unit": "pcs",
+    "unit_needs_review": false
+  },
+  {
+    "zoho_item_id": "74630000001353003",
+    "name": "3C6C Enclosure",
+    "part_code": "3C6C Top Enclosure\n3C6C Bottom Enclosure\n3C6C PCB LightGuide",
+    "unit": "pcs",
+    "unit_needs_review": false
+  },
+  {
+    "zoho_item_id": "74630000001414025",
+    "name": "U 279 C Speedo Pointer",
+    "part_code": "COM-SPA-00039",
+    "unit": "pcs",
+    "unit_needs_review": false
+  },
+  {
+    "zoho_item_id": "74630000001414034",
+    "name": "U 279 C FG Pointer",
+    "part_code": "COM-SPA-00040",
+    "unit": "pcs",
+    "unit_needs_review": false
+  },
+  {
+    "zoho_item_id": "74630000001420073",
+    "name": "U 279 C CounterPart 1",
+    "part_code": "RPT Transparent sample 1",
+    "unit": "pcs",
+    "unit_needs_review": false
+  },
+  {
+    "zoho_item_id": "74630000001420082",
+    "name": "U 279 C CounterPart Sample 2",
+    "part_code": "RPT Transparent Sample 2",
+    "unit": "pcs",
+    "unit_needs_review": false
+  },
+  {
+    "zoho_item_id": "74630000001441069",
+    "name": "N 282 Plunger",
+    "part_code": "COM-KNB-00138",
+    "unit": "pcs",
+    "unit_needs_review": false
+  },
+  {
+    "zoho_item_id": "74630000001452003",
+    "name": "Bush L 7.5 mm",
+    "part_code": null,
+    "unit": "pcs",
+    "unit_needs_review": false
+  },
+  {
+    "zoho_item_id": "74630000001452012",
+    "name": "Bush L 6.7 mm",
+    "part_code": null,
+    "unit": "pcs",
+    "unit_needs_review": false
+  },
+  {
+    "zoho_item_id": "74630000001452021",
+    "name": "Bush L 5.3 mm",
+    "part_code": null,
+    "unit": "pcs",
+    "unit_needs_review": false
+  },
+  {
+    "zoho_item_id": "74630000001457021",
+    "name": "N 282 Plunger Tool 4 Cavity",
+    "part_code": null,
+    "unit": "pcs",
+    "unit_needs_review": false
+  },
+  {
+    "zoho_item_id": "74630000001460023",
+    "name": "Discover Speedo Pointer",
+    "part_code": "COM- SPA-00002",
+    "unit": "pcs",
+    "unit_needs_review": false
+  },
+  {
+    "zoho_item_id": "74630000001658179",
+    "name": "U 279 C Speedo Pointer Cap 4 Cavity Tool",
+    "part_code": null,
+    "unit": "pcs",
+    "unit_needs_review": false
+  },
+  {
+    "zoho_item_id": "74630000001658188",
+    "name": "U 279 C Speedo Counter Part-$ cavity Tool",
+    "part_code": null,
+    "unit": "pcs",
+    "unit_needs_review": false
+  },
+  {
+    "zoho_item_id": "74630000001658201",
+    "name": "U 279 C Speedo Pointer Leaf -4 Cavity tool",
+    "part_code": null,
+    "unit": "pcs",
+    "unit_needs_review": false
+  },
+  {
+    "zoho_item_id": "74630000001658210",
+    "name": "U 279 C FG Pointer Cap tool-4 Cavity tool",
+    "part_code": null,
+    "unit": "pcs",
+    "unit_needs_review": false
+  },
+  {
+    "zoho_item_id": "74630000001658219",
+    "name": "U 279 C FG Counter Part -4 Cavity tool",
+    "part_code": null,
+    "unit": "pcs",
+    "unit_needs_review": false
+  },
+  {
+    "zoho_item_id": "74630000001658244",
+    "name": "U 279 C FG Pointer Leaf -4Cavity tool",
+    "part_code": null,
+    "unit": "pcs",
+    "unit_needs_review": false
+  },
+  {
+    "zoho_item_id": "74630000001743025",
+    "name": "BRASS SHEETS --1.6 mm",
+    "part_code": null,
+    "unit": "kg",
+    "unit_needs_review": false
+  },
+  {
+    "zoho_item_id": "74630000001956023",
+    "name": "Brass Scrap",
+    "part_code": null,
+    "unit": "kg",
+    "unit_needs_review": false
+  },
+  {
+    "zoho_item_id": "74630000002118029",
+    "name": "Ensoft SO 14170A TPE ( N)",
+    "part_code": null,
+    "unit": "kg",
+    "unit_needs_review": false
+  },
+  {
+    "zoho_item_id": "74630000002207073",
+    "name": "Zytel FR72G25V0  NC010",
+    "part_code": "(             X 25 KG )",
+    "unit": "kg",
+    "unit_needs_review": false
+  },
+  {
+    "zoho_item_id": "74630000002509043",
+    "name": "Ultramid - BASF 30% GF",
+    "part_code": null,
+    "unit": "kg",
+    "unit_needs_review": false
+  }
+]
