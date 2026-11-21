@@ -74,7 +74,7 @@ export default async function ActivityPage({ searchParams }: { searchParams: Pro
                   </td>
                   <td className="text-right tabular-nums text-muted">{a.old_quantity === null ? "—" : formatQty(a.old_quantity)}</td>
                   <td className="text-right font-semibold tabular-nums">{a.new_quantity === null ? "—" : formatQty(a.new_quantity)}</td>
-                  <td className="whitespace-nowrap text-[12.5px]">{a.report_date ? <Link className="text-accent hover:underline" href={`/reports/${a.report_date}`}>{formatDate(a.report_date)}</Link> : "—"}</td>
+                  <td className="whitespace-nowrap text-[12.5px]">{a.report_date ? <Link className="text-accent hover:underline" href={`/reports/${a.report_date}${a.details?.slot !== undefined && a.details?.slot !== null ? `?slot=${a.details.slot}` : ""}`}>{formatDate(a.report_date)}{a.details?.slot !== undefined && a.details?.slot !== null ? ` · ${String(a.details.slot).padStart(2, "0")}:00` : ""}</Link> : "—"}</td>
                 </tr>
               );
             })}

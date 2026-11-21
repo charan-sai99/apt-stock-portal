@@ -4,7 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 import {
-  Activity, Boxes, ClipboardList, Eye, FileClock, KeyRound, LayoutDashboard, LogOut, Menu,
+  Activity, Boxes, ClipboardList, Clock3, Eye, FileClock, KeyRound, LayoutDashboard, LogOut, Menu,
   RefreshCw, Users, X,
 } from "lucide-react";
 import { Brand } from "@/components/GeoMark";
@@ -17,22 +17,23 @@ function navFor(role: Profile["role"]): { title: string; items: Item[] }[] {
     return [
       { title: "Operations", items: [
         { href: "/admin", label: "Overview", icon: LayoutDashboard, exact: true },
-        { href: "/entry", label: "Daily stock entry", icon: ClipboardList },
-        { href: "/reports", label: "Report history", icon: FileClock },
+        { href: "/entry", label: "Stock entry", icon: ClipboardList },
+        { href: "/reports", label: "Update history", icon: FileClock },
         { href: "/activity", label: "Audit & activity", icon: Activity },
         { href: "/stock", label: "Customer view", icon: Eye },
       ] },
       { title: "Administration", items: [
         { href: "/admin/catalogue", label: "Catalogue & units", icon: Boxes },
         { href: "/admin/users", label: "Users & access", icon: Users },
+        { href: "/admin/settings", label: "Entry hours", icon: Clock3 },
         { href: "/admin/zoho", label: "Zoho Books sync", icon: RefreshCw },
       ] },
     ];
   }
   if (role === "operator") {
     return [{ title: "Operations", items: [
-      { href: "/entry", label: "Daily stock entry", icon: ClipboardList },
-      { href: "/reports", label: "Report history", icon: FileClock },
+      { href: "/entry", label: "Stock entry", icon: ClipboardList },
+      { href: "/reports", label: "Update history", icon: FileClock },
       { href: "/stock", label: "Published stock", icon: Eye },
     ] }];
   }

@@ -2,7 +2,7 @@ import { NextResponse, type NextRequest } from "next/server";
 import { getProfile } from "@/lib/auth";
 import { buildAuditQuery } from "@/lib/audit-query";
 import { toCsv, toXlsx, type Column } from "@/lib/export";
-import { formatDateTime } from "@/lib/format";
+import { formatDateTime, slotLabel } from "@/lib/format";
 import { createClient } from "@/lib/supabase/server";
 
 export const dynamic = "force-dynamic";
@@ -20,6 +20,9 @@ export async function GET(request: NextRequest) {
   const format = sp.get("format") === "xlsx" ? "xlsx" : "csv";
   const date = sp.get("date") ?? "";
   const validDate = /^\d{4}-\d{2}-\d{2}$/.test(date);
+  const reportParam = sp.get("report") ?? "";
+  const validReport = /^[0-9a-f-]{36}$/i.test(reportParam);
+  const slotName = (h: number) => `${String(h).padStart(2, "0")}00`;
   const supabase = await createClient();
   const { data: summary } = await supabase.rpc("portal_summary");
   const tz: string = (summary as any)?.factory_timezone ?? "Asia/Kolkata";
@@ -32,34 +35,47 @@ export async function GET(request: NextRequest) {
   let title = "";
 
   if (kind === "stock") {
-    if (!validDate) return NextResponse.json({ error: "date required" }, { status: 400 });
-    const { data, error } = await supabase.rpc("published_report_stock", { p_report_date: date });
+    let reportId = validReport ? reportParam : "";
+    let rDate = date, rSlot = 0;
+    if (validReport) {
+      const { data: list } = await supabase.rpc("published_reports", { p_limit: 2000 });
+      const hit = (list ?? []).find((u: any) => u.report_id === reportParam);
+      if (!hit) return NextResponse.json({ error: "Update not found" }, { status: 404 });
+      rDate = hit.report_date; rSlot = hit.slot_hour;
+    } else if (validDate) {
+      const { data: list } = await supabase.rpc("published_reports", { p_limit: 2000 });
+      const hit = (list ?? []).find((u: any) => u.report_date === date);
+      if (!hit) return NextResponse.json({ error: "No published update for this date" }, { status: 404 });
+      reportId = hit.report_id; rSlot = hit.slot_hour;
+    } else {
+      return NextResponse.json({ error: "report or date required" }, { status: 400 });
+    }
+    const { data, error } = await supabase.rpc("published_update_stock", { p_report_id: reportId });
     if (error) return NextResponse.json({ error: error.message }, { status: 400 });
     rows = data ?? [];
-    if (rows.length === 0) return NextResponse.json({ error: "No published report for this date" }, { status: 404 });
-    name = `APT-stock-${date}`;
-    title = `Axis Plastics Transition — published stock report for ${date} (times in ${tz})`;
+    name = `APT-stock-${rDate}-${slotName(rSlot)}`;
+    title = `Axis Plastics Transition — stock update ${rDate} ${slotLabel(rSlot)} (times in ${tz})`;
     columns = [
       { header: "Part name", value: (r) => r.item_name, width: 48 },
       { header: "Part code", value: (r) => r.part_code, width: 22 },
       { header: "SKU", value: (r) => r.sku },
       { header: "Available quantity", value: (r) => Number(r.available_quantity) },
       { header: "Unit", value: (r) => r.unit, width: 8 },
-      { header: `Last updated (${tz})`, value: (r) => ts(r.updated_at), width: 24 },
-      { header: "Report date", value: () => date, width: 12 },
+      { header: `Quantity last changed (${tz})`, value: (r) => ts(r.updated_at), width: 26 },
+      { header: "Update", value: () => `${rDate} ${slotLabel(rSlot)}`, width: 18 },
       { header: "Zoho item ID", value: (r) => r.zoho_item_id, width: 20 },
     ];
   } else if (kind === "register") {
     if (profile.role === "customer") return forbid();
-    if (!validDate) return NextResponse.json({ error: "date required" }, { status: 400 });
-    const { data: report } = await supabase.from("daily_reports").select("id,status").eq("report_date", date).maybeSingle();
-    if (!report) return NextResponse.json({ error: "No report for this date" }, { status: 404 });
+    if (!validReport) return NextResponse.json({ error: "report required" }, { status: 400 });
+    const { data: report } = await supabase.from("daily_reports").select("id,status,report_date,slot_hour").eq("id", reportParam).maybeSingle();
+    if (!report) return NextResponse.json({ error: "Update not found" }, { status: 404 });
     const { data } = await supabase.from("daily_stock_entries")
-      .select("zoho_item_id,item_name_snapshot,part_code_snapshot,available_quantity,unit_snapshot,created_at,created_by_name,updated_at,updated_by_name,revision")
+      .select("zoho_item_id,item_name_snapshot,part_code_snapshot,available_quantity,unit_snapshot,created_at,created_by_name,updated_at,updated_by_name,value_updated_at,value_updated_by_name,carried_from_report_id,revision")
       .eq("report_id", report.id).order("item_name_snapshot");
     rows = data ?? [];
-    name = `APT-register-${date}-${report.status}`;
-    title = `Stock entry register — ${date} (${report.status}) — times in ${tz}`;
+    name = `APT-register-${report.report_date}-${slotName(report.slot_hour)}-${report.status}`;
+    title = `Stock entry register — ${report.report_date} ${slotLabel(report.slot_hour)} (${report.status}) — times in ${tz}`;
     columns = [
       { header: "Part name", value: (r) => r.item_name_snapshot, width: 48 },
       { header: "Part code", value: (r) => r.part_code_snapshot, width: 22 },
@@ -67,8 +83,9 @@ export async function GET(request: NextRequest) {
       { header: "Unit", value: (r) => r.unit_snapshot, width: 8 },
       { header: `Created (${tz})`, value: (r) => ts(r.created_at), width: 24 },
       { header: "Created by", value: (r) => r.created_by_name, width: 20 },
-      { header: `Last modified (${tz})`, value: (r) => ts(r.updated_at), width: 24 },
-      { header: "Modified by", value: (r) => r.updated_by_name, width: 20 },
+      { header: `Quantity last changed (${tz})`, value: (r) => ts(r.value_updated_at ?? r.updated_at), width: 26 },
+      { header: "Changed by", value: (r) => r.value_updated_by_name ?? r.updated_by_name, width: 20 },
+      { header: "Carried forward", value: (r) => (r.carried_from_report_id ? "Yes" : "No"), width: 14 },
       { header: "Revision", value: (r) => r.revision, width: 10 },
       { header: "Zoho item ID", value: (r) => r.zoho_item_id, width: 20 },
     ];

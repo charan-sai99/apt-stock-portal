@@ -2,7 +2,7 @@
 
 import { useMemo, useState, useTransition } from "react";
 import { ArrowDownToLine, ChevronLeft, ChevronRight, LineChart, Loader2, Search, X } from "lucide-react";
-import { formatDate, formatDateTime, formatQty, tzLabel } from "@/lib/format";
+import { formatDate, formatDateTime, formatQty, slotLabel, tzLabel } from "@/lib/format";
 import { matchesSearch } from "@/lib/validation";
 import type { PublishedStockRow } from "@/lib/types";
 import { itemHistoryAction, type HistoryPoint } from "./actions";
@@ -10,7 +10,7 @@ import { itemHistoryAction, type HistoryPoint } from "./actions";
 type View = "all" | "available" | "zero";
 type Sort = "name" | "qty-desc" | "qty-asc";
 
-export function StockTable({ rows, reportDate, timezone }: { rows: PublishedStockRow[]; reportDate: string; timezone: string }) {
+export function StockTable({ rows, reportId, fileLabel, timezone }: { rows: PublishedStockRow[]; reportId: string; fileLabel: string; timezone: string }) {
   const [query, setQuery] = useState("");
   const [view, setView] = useState<View>("all");
   const [sort, setSort] = useState<Sort>("name");
@@ -60,15 +60,15 @@ export function StockTable({ rows, reportDate, timezone }: { rows: PublishedStoc
             <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-graphite-300" />
             <input value={query} onChange={(e) => { setQuery(e.target.value); setPage(1); }} className="input pl-9" placeholder="Search name, part code, SKU" aria-label="Search parts" />
           </div>
-          <a href={`/api/export?kind=stock&date=${reportDate}&format=xlsx`} className="btn btn-secondary"><ArrowDownToLine size={15} /> Excel</a>
-          <a href={`/api/export?kind=stock&date=${reportDate}&format=csv`} className="btn btn-secondary">CSV</a>
+          <a href={`/api/export?kind=stock&report=${reportId}&format=xlsx`} className="btn btn-secondary" title={fileLabel}><ArrowDownToLine size={15} /> Excel</a>
+          <a href={`/api/export?kind=stock&report=${reportId}&format=csv`} className="btn btn-secondary">CSV</a>
         </div>
       </div>
 
       <div className="overflow-x-auto">
         <table className="table">
           <thead>
-            <tr><th>Part</th><th className="hidden md:table-cell">Part code</th><th className="text-right">Available</th><th className="hidden md:table-cell">Unit</th><th className="hidden lg:table-cell">Last updated ({tzLabel(timezone)})</th><th /></tr>
+            <tr><th>Part</th><th className="hidden md:table-cell">Part code</th><th className="text-right">Available</th><th className="hidden md:table-cell">Unit</th><th className="hidden lg:table-cell">Qty last changed ({tzLabel(timezone)})</th><th /></tr>
           </thead>
           <tbody>
             {visible.map((r) => {
@@ -104,7 +104,7 @@ export function StockTable({ rows, reportDate, timezone }: { rows: PublishedStoc
           <aside className="h-full w-full max-w-md overflow-y-auto bg-white p-6 shadow-2xl" onClick={(e) => e.stopPropagation()} role="dialog" aria-modal="true" aria-label="Stock history">
             <div className="flex items-start justify-between gap-3">
               <div>
-                <p className="eyebrow">Stock history · last 30 reports</p>
+                <p className="eyebrow">Stock history · recent updates</p>
                 <h2 className="mt-1 text-lg font-semibold leading-snug">{history.row.item_name}</h2>
                 {history.row.part_code && <span className="tag tag-code mt-2">{history.row.part_code}</span>}
               </div>
@@ -117,8 +117,8 @@ export function StockTable({ rows, reportDate, timezone }: { rows: PublishedStoc
             ) : (
               <div className="mt-6 space-y-1.5">
                 {history.points.map((p) => (
-                  <div key={p.report_date} className="grid grid-cols-[110px_1fr_auto] items-center gap-3 text-sm">
-                    <span className="text-muted">{formatDate(p.report_date)}</span>
+                  <div key={`${p.report_date}-${p.slot_hour}`} className="grid grid-cols-[120px_1fr_auto] items-center gap-3 text-sm">
+                    <span className="text-muted">{formatDate(p.report_date, { year: undefined })} · {slotLabel(p.slot_hour)}</span>
                     <div className="h-2 rounded-full bg-paper"><div className="h-2 rounded-full bg-accent" style={{ width: `${(Number(p.available_quantity) / max) * 100}%` }} /></div>
                     <b className="w-24 text-right tabular-nums">{formatQty(p.available_quantity)} <span className="text-xs font-normal text-muted">{p.unit}</span></b>
                   </div>

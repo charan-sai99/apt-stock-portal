@@ -6,7 +6,7 @@ import { Loader2, Trash2, X } from "lucide-react";
 import { formatDate } from "@/lib/format";
 import { deleteReportAction } from "./actions";
 
-export function DeleteReport({ reportId, reportDate, status, lines }: { reportId: string; reportDate: string; status: string; lines: number }) {
+export function DeleteReport({ reportId, reportDate, slotLabel = "", status, lines }: { reportId: string; reportDate: string; slotLabel?: string; status: string; lines: number }) {
   const router = useRouter();
   const [open, setOpen] = useState(false);
   const [reason, setReason] = useState("");
@@ -26,19 +26,19 @@ export function DeleteReport({ reportId, reportDate, status, lines }: { reportId
     <>
       <div className="card mt-6 flex flex-col gap-3 border-danger/25 p-5 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h2 className="font-semibold text-danger">Delete this report</h2>
-          <p className="text-sm text-muted">Permanently removes the report, its {lines} line(s) and any amendments{status !== "draft" ? ", including from the customer's view" : ""}. Only an audit line is kept. This cannot be undone.</p>
+          <h2 className="font-semibold text-danger">Delete this update</h2>
+          <p className="text-sm text-muted">Permanently removes the {slotLabel} update, its {lines} line(s) and any amendments{status !== "draft" ? ", including from the customer's view" : ""}. Only an audit line is kept. This cannot be undone.</p>
         </div>
-        <button onClick={() => { setOpen(true); setError(""); setReason(""); setConfirmText(""); }} className="btn btn-danger shrink-0"><Trash2 size={16} /> Delete report</button>
+        <button onClick={() => { setOpen(true); setError(""); setReason(""); setConfirmText(""); }} className="btn btn-danger shrink-0"><Trash2 size={16} /> Delete update</button>
       </div>
       {open && (
         <div className="fixed inset-0 z-50 grid place-items-center bg-black/50 p-4" role="dialog" aria-modal="true" aria-labelledby="del-title">
           <div className="card w-full max-w-md p-6">
             <div className="flex items-start justify-between">
-              <div><p className="eyebrow text-danger">Permanent delete</p><h2 id="del-title" className="display mt-1 text-2xl">Delete report · {formatDate(reportDate)}</h2></div>
+              <div><p className="eyebrow text-danger">Permanent delete</p><h2 id="del-title" className="display mt-1 text-2xl">Delete update · {formatDate(reportDate)} {slotLabel}</h2></div>
               <button aria-label="Close" onClick={() => setOpen(false)} className="btn btn-ghost btn-sm px-2"><X size={18} /></button>
             </div>
-            <p className="mt-3 text-sm text-muted">All {lines} quantity line(s) for this date will be erased{status !== "draft" ? " and the customer will no longer see this report" : ""}. Afterwards a new report can be started for this date.</p>
+            <p className="mt-3 text-sm text-muted">All {lines} quantity line(s) of this update will be erased{status !== "draft" ? " and the customer will no longer see it" : ""}. If its hour is still open, a new update can be started for it.</p>
             <label className="label mt-5" htmlFor="del-reason">Reason</label>
             <textarea id="del-reason" rows={2} value={reason} onChange={(e) => setReason(e.target.value)} className="input h-auto py-2" placeholder="e.g. Test report before go-live" />
             <label className="label mt-4" htmlFor="del-confirm">Type <b className="font-mono">{reportDate}</b> to confirm</label>

@@ -12,6 +12,8 @@ const rpcSave = (uid: string, entries: unknown[]) =>
 beforeAll(async () => {
   await resetDatabase();
   db = await Db.connect();
+  // Keep stock entry open around the clock during tests (hourly updates, migration 0009).
+  await db.super("update app_settings set value = case key when 'entry_open_hour' then '0' when 'entry_close_hour' then '24' else '1' end where key in ('entry_open_hour','entry_close_hour','entry_interval_hours')");
   admin = await createUser(db, "manager@apt.test", "Factory Manager", "admin", null);
   op1 = await createUser(db, "op1@apt.test", "Operator One", "operator", 1);
   op2 = await createUser(db, "op2@apt.test", "Operator Two", "operator", 2);
@@ -403,7 +405,7 @@ describe("Manually added items", () => {
 
   it("customers cannot add items; operators only on today's draft", async () => {
     await expect(add(customer, "Customer item", null, "pcs", "1")).rejects.toThrow(/permission/);
-    await expect(add(op1, "Operator item", null, "pcs", "1")).rejects.toThrow(/only edit the report for today/);
+    await expect(add(op1, "Operator item", null, "pcs", "1")).rejects.toThrow(/only edit the current update/);
   });
 });
 
@@ -501,5 +503,84 @@ describe("Fresh-start reset script", () => {
     // and now former operators can be deleted
     const [h] = await db.as(admin, "select public.admin_user_history($1) h", [op2]);
     expect(h.h.can_delete).toBe(true);
+  });
+});
+
+describe("Hourly updates (0009)", () => {
+  const D = "factory_today() + 60";
+  let src: any, next: any;
+
+  it("entry is closed outside the admin-set hours; admin can change hours, operators cannot", async () => {
+    const [{ h }] = await db.super("select extract(hour from now() at time zone factory_timezone())::int h");
+    // close entry for the current hour
+    const open = h < 23 ? h + 1 : 0, close = h < 23 ? 24 : h;
+    await db.as(admin, "select public.admin_set_entry_hours($1,$2,1)", [open, close]);
+    await expect(db.as(op1, "select * from public.get_or_create_today_report()")).rejects.toThrow(/entry is closed/i);
+    await expect(db.as(op1, "select public.admin_set_entry_hours(0,24,1)")).rejects.toThrow(/permission/);
+    await expect(db.as(admin, "select public.admin_set_entry_hours(10,9,1)")).rejects.toThrow(/Invalid hours/);
+    await db.as(admin, "select public.admin_set_entry_hours(0,24,1)");
+    const [s] = await db.as(op1, "select public.portal_summary() s");
+    expect(s.s.current_slot_hour).toBe(h);
+    const [log] = await db.as(admin, "select details from audit_logs where action='settings_changed' order by id desc limit 1");
+    expect(log.details.new).toEqual({ open: 0, close: 24, interval: 1 });
+  });
+
+  it("a new update carries forward the latest published update of the same day, keeping original times, without audit noise", async () => {
+    [src] = await db.super(`select * from public.ensure_update(${D}, 9::smallint, $1)`, [op1]);
+    await db.super(`insert into daily_stock_entries(report_id, zoho_item_id, available_quantity, unit_snapshot, updated_by)
+                    select $1, zoho_item_id, 50, unit, $2 from zoho_items where unit is not null and item_source='zoho' order by zoho_item_id limit 4`, [src.id, op1]);
+    const [v] = await db.super("select version from daily_reports where id=$1", [src.id]);
+    await db.as(admin, "select * from public.submit_report($1,$2)", [src.id, v.version]);
+    const srcEntries = await db.super("select zoho_item_id, value_updated_at from daily_stock_entries where report_id=$1 order by zoho_item_id", [src.id]);
+
+    await new Promise((r) => setTimeout(r, 20));
+    [next] = await db.super(`select * from public.ensure_update(${D}, 10::smallint, $1)`, [op2]);
+    const carried = await db.super("select zoho_item_id, value_updated_at, carried_from_report_id, available_quantity from daily_stock_entries where report_id=$1 order by zoho_item_id", [next.id]);
+    expect(carried).toHaveLength(4);
+    carried.forEach((c: any, i: number) => {
+      expect(c.carried_from_report_id).toBe(src.id);
+      expect(c.value_updated_at.getTime()).toBe(srcEntries[i].value_updated_at.getTime());
+      expect(Number(c.available_quantity)).toBe(50);
+    });
+    const [noise] = await db.super("select count(*)::int n from audit_logs where report_id=$1 and operation='draft_entry'", [next.id]);
+    expect(noise.n).toBe(0);
+    const [created] = await db.super("select details from audit_logs where report_id=$1 and action='report_created'", [next.id]);
+    expect(created.details.carried_forward).toBe(4);
+  });
+
+  it("changing a carried quantity marks it as changed now; untouched parts keep their old time for the customer", async () => {
+    const rows = await db.super("select zoho_item_id, revision from daily_stock_entries where report_id=$1 order by zoho_item_id", [next.id]);
+    reportId = next.id;
+    const res = await rpcSave(admin, [{ zoho_item_id: rows[0].zoho_item_id, quantity: "45", expected_revision: rows[0].revision }]);
+    expect(res.saved).toBe(1);
+    const changed = res.entries.find((e: any) => e.zoho_item_id === rows[0].zoho_item_id);
+    expect(changed.carried).toBe(false);
+    expect(res.entries.filter((e: any) => e.carried)).toHaveLength(3);
+    const [v] = await db.super("select version from daily_reports where id=$1", [next.id]);
+    await db.as(admin, "select * from public.submit_report($1,$2)", [next.id, v.version]);
+    const stock = await db.as(customer, "select * from public.published_update_stock($1) order by zoho_item_id", [next.id]);
+    const [srcTime] = await db.super("select value_updated_at from daily_stock_entries where report_id=$1 and zoho_item_id=$2", [src.id, rows[1].zoho_item_id]);
+    expect(Number(stock[0].available_quantity)).toBe(45);
+    expect(stock[0].updated_at.getTime()).toBeGreaterThan(srcTime.value_updated_at.getTime());
+    expect(stock[1].updated_at.getTime()).toBe(srcTime.value_updated_at.getTime());
+    // latest-of-date helper returns the 10:00 update; history lists both hours
+    const [byDate] = await db.as(customer, `select available_quantity from public.published_report_stock(${D}) where zoho_item_id=$1`, [rows[0].zoho_item_id]);
+    expect(Number(byDate.available_quantity)).toBe(45);
+    const list = await db.as(customer, `select slot_hour from public.published_reports() where report_date = ${D}`);
+    expect(list.map((r: any) => r.slot_hour)).toEqual([10, 9]);
+    const hist = await db.as(customer, `select slot_hour, available_quantity from public.published_item_history($1) where report_date = ${D}`, [rows[0].zoho_item_id]);
+    expect(hist.map((x: any) => [x.slot_hour, Number(x.available_quantity)])).toEqual([[10, 45], [9, 50]]);
+  });
+
+  it("the first update of a new day starts empty (no carry-over from yesterday)", async () => {
+    const [first] = await db.super(`select * from public.ensure_update(${D} + 1, 8::smallint, $1)`, [op1]);
+    expect(await db.super("select 1 from daily_stock_entries where report_id=$1", [first.id])).toHaveLength(0);
+  });
+
+  it("operators cannot edit an update whose hour is not open now", async () => {
+    const [old] = await db.super(`select * from public.ensure_update(${D}, 11::smallint, $1)`, [op1]);
+    reportId = old.id;
+    await expect(rpcSave(op1, [{ zoho_item_id: "x", quantity: "1", expected_revision: 0 }])).rejects.toThrow(/only edit the current update/);
+    await expect(db.as(op1, "select ensure_update(current_date, 1::smallint, $1)", [op1])).rejects.toThrow(/permission denied/);
   });
 });

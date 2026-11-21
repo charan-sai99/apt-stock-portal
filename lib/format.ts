@@ -31,3 +31,8 @@ export function formatQty(q: number | string | null | undefined) {
 export function tzLabel(tz: string) {
   return tz === "Asia/Kolkata" ? "IST" : tz;
 }
+
+/** "10:00" for an hourly update slot. */
+export function slotLabel(h: number | null | undefined) {
+  return h === null || h === undefined ? "—" : `${String(h).padStart(2, "0")}:00`;
+}

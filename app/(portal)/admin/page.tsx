@@ -5,7 +5,7 @@ import { PageHeader, StatCard } from "@/components/PageHeader";
 import { StatusTag } from "@/components/StatusTag";
 import { requireProfile } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
-import { formatDate, formatDateTime, formatQty, tzLabel } from "@/lib/format";
+import { formatDate, formatDateTime, formatQty, slotLabel, tzLabel } from "@/lib/format";
 import { opLabel } from "@/lib/operations";
 import type { PortalSummary } from "@/lib/types";
 
@@ -19,7 +19,9 @@ export default async function AdminOverview() {
   const tz = s.factory_timezone;
 
   const [{ data: today }, { data: lastSync }, { data: profiles }, { data: recent }] = await Promise.all([
-    supabase.from("daily_reports").select("id,status,submitted_at,version").eq("report_date", s.factory_today).maybeSingle(),
+    s.current_slot_hour !== null
+      ? supabase.from("daily_reports").select("id,status,submitted_at,version,slot_hour").eq("report_date", s.factory_today).eq("slot_hour", s.current_slot_hour).maybeSingle()
+      : Promise.resolve({ data: null as any }),
     supabase.from("zoho_sync_runs").select("*").order("started_at", { ascending: false }).limit(1).maybeSingle(),
     supabase.from("profiles").select("role,is_active"),
     supabase.from("audit_logs").select("id,created_at,actor_name,operation,action,details,old_quantity,new_quantity").order("id", { ascending: false }).limit(12),
@@ -44,9 +46,10 @@ export default async function AdminOverview() {
       )}
 
       <div className="mb-6 grid grid-cols-2 gap-3 lg:grid-cols-4 lg:gap-4">
-        <StatCard icon={ClipboardCheck} tone={today?.status && today.status !== "draft" ? "ok" : "warn"} label="Today's report"
-          value={today ? (today.status === "draft" ? `${pct}%` : "Published") : "Not started"}
-          sub={today ? (today.status === "draft" ? `${entered} / ${s.reportable_items} parts saved` : formatDateTime(today.submitted_at, tz)) : formatDate(s.factory_today)} />
+        <StatCard icon={ClipboardCheck} tone={today?.status && today.status !== "draft" ? "ok" : s.current_slot_hour === null ? "muted" : "warn"}
+          label={s.current_slot_hour === null ? "Stock entry" : `Update ${slotLabel(s.current_slot_hour)}`}
+          value={s.current_slot_hour === null ? "Closed" : today ? (today.status === "draft" ? `${pct}%` : "Published") : "Not started"}
+          sub={s.current_slot_hour === null ? `Hours ${slotLabel(s.entry_open_hour)}–${slotLabel(s.entry_close_hour)}` : today ? (today.status === "draft" ? `${entered} / ${s.reportable_items} parts saved` : formatDateTime(today.submitted_at, tz)) : `Open until ${formatDateTime(s.current_slot_closes_at, tz).split(", ").pop()?.slice(0, 5)}`} />
         <StatCard icon={Boxes} label="Stock catalogue" value={s.reportable_items} sub={`${s.items_missing_unit} need a unit`} tone={s.items_missing_unit ? "warn" : "accent"} />
         <StatCard icon={RefreshCw} tone={lastSync?.status === "failed" ? "danger" : "muted"} label="Last Zoho sync"
           value={<span className="text-xl capitalize">{lastSync ? lastSync.status : "Never"}</span>}
@@ -57,13 +60,13 @@ export default async function AdminOverview() {
 
       <div className="grid gap-5 lg:grid-cols-[1fr_1.4fr]">
         <div className="card-dark relative overflow-hidden p-6 geo-bg">
-          <p className="eyebrow text-graphite-300">Today · {formatDate(s.factory_today, { weekday: "long" })}</p>
+          <p className="eyebrow text-graphite-300">Today · {formatDate(s.factory_today, { weekday: "long" })}{s.current_slot_hour !== null ? ` · update ${slotLabel(s.current_slot_hour)}` : " · entry closed"}</p>
           <div className="mt-3 flex items-center gap-3">{today ? <StatusTag status={today.status} /> : <span className="tag tag-muted">Not started</span>}</div>
           <div className="mt-5 h-2 overflow-hidden rounded-full bg-graphite-700"><div className="h-full bg-accent" style={{ width: `${today?.status === "draft" || !today ? pct : 100}%` }} /></div>
-          <p className="mt-4 text-sm text-graphite-300">Latest published report: <b className="text-white">{s.latest_published_date ? formatDate(s.latest_published_date) : "none yet"}</b></p>
+          <p className="mt-4 text-sm text-graphite-300">Latest published update: <b className="text-white">{s.latest_published_date ? `${formatDate(s.latest_published_date)} ${slotLabel(s.latest_published_slot)}` : "none yet"}</b></p>
           <div className="mt-6 flex flex-wrap gap-2">
-            <Link href="/entry" className="btn btn-primary">Open daily entry</Link>
-            {today && <Link href={`/reports/${s.factory_today}`} className="btn bg-white/10 text-white hover:bg-white/20">Timestamps</Link>}
+            <Link href="/entry" className="btn btn-primary">Open stock entry</Link>
+            {today && <Link href={`/reports/${s.factory_today}?slot=${today.slot_hour}`} className="btn bg-white/10 text-white hover:bg-white/20">Timestamps</Link>}
           </div>
         </div>
         <div className="card overflow-hidden">

@@ -10,11 +10,11 @@ import { amendAction, deleteEntryAction } from "./actions";
 export type RegisterRow = {
   zoho_item_id: string; item_name: string; part_code: string | null; unit: string | null;
   available_quantity: number | string | null; created_at: string | null; created_by_name: string | null;
-  updated_at: string | null; updated_by_name: string | null; revision: number; amended: boolean;
+  updated_at: string | null; updated_by_name: string | null; revision: number; amended: boolean; carried?: boolean;
 };
 
-export function Register({ rows, timezone, canAmend, canDelete = false, reportId, reportDate }: {
-  rows: RegisterRow[]; timezone: string; canAmend: boolean; canDelete?: boolean; reportId: string; reportDate: string;
+export function Register({ rows, timezone, canAmend, canDelete = false, reportId, reportDate, slot }: {
+  rows: RegisterRow[]; timezone: string; canAmend: boolean; canDelete?: boolean; reportId: string; reportDate: string; slot?: number;
 }) {
   const router = useRouter();
   const [query, setQuery] = useState("");
@@ -59,7 +59,7 @@ export function Register({ rows, timezone, canAmend, canDelete = false, reportId
       <div className="max-h-[70vh] overflow-auto">
         <table className="table">
           <thead className="sticky top-0 z-[1]"><tr>
-            <th>Part</th><th className="text-right">Qty</th><th>Unit</th><th>First entered</th><th>Last modified</th><th className="text-right">Rev.</th>{(canAmend || canDelete) && <th />}
+            <th>Part</th><th className="text-right">Qty</th><th>Unit</th><th>Entered in this update</th><th>Quantity last changed</th><th className="text-right">Rev.</th>{(canAmend || canDelete) && <th />}
           </tr></thead>
           <tbody>
             {visible.map((r) => (
@@ -69,6 +69,7 @@ export function Register({ rows, timezone, canAmend, canDelete = false, reportId
                   <div className="mt-0.5 flex items-center gap-2 text-[11px] text-graphite-400">
                     {r.part_code && <span className="font-mono">{r.part_code}</span>}
                     {r.amended && <span className="tag tag-unit py-0 text-[10px]">Amended</span>}
+                    {r.carried && <span className="tag tag-muted py-0 text-[10px]">Carried</span>}
                   </div>
                 </td>
                 <td className="text-right font-bold tabular-nums">{r.available_quantity === null ? <span className="tag tag-muted">Not reported</span> : formatQty(r.available_quantity)}</td>

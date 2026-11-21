@@ -8,12 +8,13 @@ import {
 } from "lucide-react";
 import { PageHeader } from "@/components/PageHeader";
 import { checkQuantity, matchesSearch, sameQuantity } from "@/lib/validation";
-import { formatDate, formatQty, formatTime, tzLabel } from "@/lib/format";
+import { formatDate, formatQty, formatTime, slotLabel, tzLabel } from "@/lib/format";
 import type { CatalogueItem, Conflict, EntryState } from "@/lib/types";
 import { addManualItemAction, refreshEntriesAction, saveDraftAction, submitReportAction } from "./actions";
 
 type Props = {
-  report: { id: string; report_date: string; version: number };
+  report: { id: string; report_date: string; version: number; slot_hour: number };
+  closesAt: string | null;
   items: CatalogueItem[];
   initialEntries: EntryState[];
   timezone: string;
@@ -26,7 +27,7 @@ const PAGE_SIZES = [25, 50, 100, 500];
 
 const toMap = (list: EntryState[]) => new Map(list.map((e) => [e.zoho_item_id, e]));
 
-export function StockEntryGrid({ report, items: initialItems, initialEntries, timezone, userName, isAdmin }: Props) {
+export function StockEntryGrid({ report, closesAt, items: initialItems, initialEntries, timezone, userName, isAdmin }: Props) {
   const router = useRouter();
   const storageKey = `apt-draft-${report.id}`;
   const [items, setItems] = useState(initialItems);
@@ -47,6 +48,11 @@ export function StockEntryGrid({ report, items: initialItems, initialEntries, ti
   const [saving, startSave] = useTransition();
   const [submitting, startSubmit] = useTransition();
   const inputs = useRef<Record<string, HTMLInputElement | null>>({});
+  const [nowMs, setNowMs] = useState(() => Date.now());
+  useEffect(() => { const t = setInterval(() => setNowMs(Date.now()), 20_000); return () => clearInterval(t); }, []);
+  const closesMs = closesAt ? new Date(closesAt).getTime() : null;
+  const windowClosed = closesMs !== null && nowMs >= closesMs;
+  const minutesLeft = closesMs !== null ? Math.max(0, Math.ceil((closesMs - nowMs) / 60_000)) : null;
 
   const needsUnit = useMemo(() => items.filter((i) => !i.unit || i.unit_needs_review), [items]);
   const enterable = useMemo(() => items.filter((i) => i.unit && !i.unit_needs_review), [items]);
@@ -55,7 +61,8 @@ export function StockEntryGrid({ report, items: initialItems, initialEntries, ti
   const conflictCount = Object.keys(conflicts).length;
   const errorCount = Object.keys(rowErrors).length;
   const pct = items.length ? Math.round((completed / items.length) * 100) : 0;
-  const readyToSubmit = saved.size > 0 && dirtyIds.length === 0 && conflictCount === 0;
+  const readyToSubmit = saved.size > 0 && dirtyIds.length === 0 && conflictCount === 0 && !windowClosed;
+  const carriedCount = [...saved.values()].filter((e) => e.carried).length;
   const leftEmpty = items.length - saved.size;
 
   // Restore unsaved edits after an accidental reload/close (this browser only).
@@ -247,7 +254,7 @@ export function StockEntryGrid({ report, items: initialItems, initialEntries, ti
 
   const reviewRows = items
     .filter((i) => saved.has(i.zoho_item_id))
-    .map((i) => ({ id: i.zoho_item_id, name: i.item_name, code: i.part_code, unit: i.unit ?? "", qty: saved.get(i.zoho_item_id)!.available_quantity }));
+    .map((i) => ({ id: i.zoho_item_id, name: i.item_name, code: i.part_code, unit: i.unit ?? "", qty: saved.get(i.zoho_item_id)!.available_quantity, carried: !!saved.get(i.zoho_item_id)!.carried }));
   const emptyRows = items.filter((i) => !saved.has(i.zoho_item_id)).map((i) => ({ id: i.zoho_item_id, name: i.item_name, code: i.part_code }));
 
   const tz = tzLabel(timezone);
@@ -262,25 +269,37 @@ export function StockEntryGrid({ report, items: initialItems, initialEntries, ti
   return (
     <>
       <PageHeader
-        eyebrow={`Draft report · ${formatDate(report.report_date, { weekday: "long" })}`}
-        title="Daily stock entry"
-        description="Enter today's physically available finished-goods quantities. Zero is a valid quantity; parts left empty are not included in the published report. Both operators can work on the draft at the same time."
+        eyebrow={`Draft update ${slotLabel(report.slot_hour)} · ${formatDate(report.report_date, { weekday: "long" })}`}
+        title={`Stock update · ${slotLabel(report.slot_hour)}`}
+        description={carriedCount > 0
+          ? `Quantities from the last published update are already filled in (marked "carried"). Change only what has moved, then submit. Zero is a valid quantity; empty parts are not published.`
+          : "Enter the physically available finished-goods quantities. Zero is a valid quantity; parts left empty are not included in the published update. Both operators can work on the draft at the same time."}
         actions={
           <>
             <span className="flex items-center gap-1.5 text-xs text-muted">
               {dirtyIds.length ? <CloudOff size={14} className="text-warn" /> : <Cloud size={14} className="text-ok" />}
               {dirtyIds.length ? `${dirtyIds.length} unsaved` : `Synced ${formatTime(lastSync, timezone)} ${tz}`}
             </span>
+            {minutesLeft !== null && !windowClosed && (
+              <span className={`tag ${minutesLeft <= 10 ? "tag-warn" : "tag-muted"}`}>Closes {formatTime(closesAt, timezone)} · {minutesLeft} min left</span>
+            )}
             <button onClick={() => refresh()} className="btn btn-secondary btn-sm"><RefreshCw size={14} /> Reload latest</button>
           </>
         }
       />
 
+      {windowClosed && (
+        <div className="mb-5 flex flex-col gap-3 rounded-xl border border-warn/25 bg-warn-50 px-4 py-3.5 text-sm text-warn sm:flex-row sm:items-center sm:justify-between">
+          <span><b>The {slotLabel(report.slot_hour)} update closed at {formatTime(closesAt, timezone)}.</b> Unpublished changes in it can no longer be submitted by operators.</span>
+          <button onClick={() => router.refresh()} className="btn btn-dark btn-sm">Open current update</button>
+        </div>
+      )}
+
       {/* Progress */}
       <div className="card mb-5 p-5">
         <div className="flex flex-wrap items-end justify-between gap-4">
           <div>
-            <p className="eyebrow">Report completion</p>
+            <p className="eyebrow">Update completion</p>
             <div className="mt-1.5 flex items-baseline gap-2">
               <span className="text-3xl font-bold tracking-tight">{completed}</span>
               <span className="text-muted">/ {items.length} parts saved</span>
@@ -355,7 +374,7 @@ export function StockEntryGrid({ report, items: initialItems, initialEntries, ti
                       <div className="mt-1.5 flex flex-wrap items-center gap-1.5 md:hidden">
                         {item.part_code && <span className="tag tag-code">{item.part_code}</span>}
                         {noUnit ? <span className="tag tag-warn">Unit required</span> : <span className="tag tag-unit">{item.unit}</span>}
-                        {conflict ? <span className="tag tag-danger">Conflict</span> : dirty ? <span className="tag tag-warn">Unsaved</span> : s ? <span className="tag tag-ok"><Check size={11} /> {formatTime(s.updated_at, timezone)}</span> : null}
+                        {conflict ? <span className="tag tag-danger">Conflict</span> : dirty ? <span className="tag tag-warn">Unsaved</span> : s?.carried ? <span className="tag tag-muted">Carried · {formatTime(s.value_updated_at ?? s.updated_at, timezone)}</span> : s ? <span className="tag tag-ok"><Check size={11} /> {formatTime(s.updated_at, timezone)}</span> : null}
                       </div>
                     </td>
                     <td className="hidden md:table-cell">{item.part_code ? <span className="tag tag-code">{item.part_code}</span> : <span className="text-graphite-300">—</span>}</td>
@@ -397,6 +416,11 @@ export function StockEntryGrid({ report, items: initialItems, initialEntries, ti
                         <span className="text-[12px] text-warn">No unit yet — cannot be entered</span>
                       ) : dirty ? (
                         <span className="tag tag-warn">Unsaved</span>
+                      ) : s?.carried ? (
+                        <div className="text-[12px]">
+                          <span className="tag tag-muted">Carried</span>
+                          <div className="mt-1 text-graphite-400">Last changed {formatTime(s.value_updated_at ?? s.updated_at, timezone)} {tz} · {s.value_updated_by_name ?? "—"}</div>
+                        </div>
                       ) : s ? (
                         <div className="text-[12px]">
                           <span className="tag tag-ok"><Check size={12} /> Saved</span>
@@ -440,11 +464,11 @@ export function StockEntryGrid({ report, items: initialItems, initialEntries, ti
             {dirtyIds.length > 0
               ? <span><b className="text-ink">{dirtyIds.length} unsaved change(s).</b> Save the draft before submitting.</span>
               : readyToSubmit
-                ? <span><b className="text-ink">Ready to submit.</b> {saved.size} part(s) saved{leftEmpty > 0 ? `, ${leftEmpty} left empty (not published)` : ""}.</span>
+                ? <span><b className="text-ink">Ready to submit.</b> {saved.size} part(s){carriedCount ? ` (${carriedCount} carried)` : ""}{leftEmpty > 0 ? `, ${leftEmpty} left empty (not published)` : ""}.</span>
                 : <span>Signed in as <b className="text-ink">{userName}</b>. Every save is recorded with your name and the server time.{needsUnit.length > 0 && isAdmin ? " Set missing units in Catalogue & units." : ""}</span>}
           </div>
           <div className="flex gap-2">
-            <button onClick={save} disabled={saving || dirtyIds.length === 0} className="btn btn-secondary">
+            <button onClick={save} disabled={saving || dirtyIds.length === 0 || (windowClosed && !isAdmin)} className="btn btn-secondary">
               {saving ? <Loader2 size={16} className="animate-spin" /> : <Save size={16} />} Save draft{dirtyIds.length ? ` (${dirtyIds.length})` : ""}
             </button>
             <button onClick={() => setConfirming(true)} disabled={!readyToSubmit || submitting} className="btn btn-primary"
@@ -492,10 +516,10 @@ export function StockEntryGrid({ report, items: initialItems, initialEntries, ti
           <div className="card flex max-h-[92vh] w-full max-w-3xl flex-col overflow-hidden">
             <div className="border-b border-line p-5 sm:p-6">
               <p className="eyebrow">Review before publishing</p>
-              <h2 id="confirm-title" className="display mt-1 text-2xl">Report summary · {formatDate(report.report_date, { weekday: "long" })}</h2>
+              <h2 id="confirm-title" className="display mt-1 text-2xl">Update {slotLabel(report.slot_hour)} · {formatDate(report.report_date, { weekday: "long" })}</h2>
               <div className="mt-4 grid grid-cols-3 gap-2 text-center">
                 <div className="rounded-lg bg-paper p-2.5"><div className="text-xl font-bold tabular-nums">{reviewRows.length}</div><div className="text-[11px] text-muted">Parts with a quantity</div></div>
-                <div className="rounded-lg bg-paper p-2.5"><div className="text-xl font-bold tabular-nums">{reviewRows.filter((r) => Number(r.qty) === 0).length}</div><div className="text-[11px] text-muted">Zero stock</div></div>
+                <div className="rounded-lg bg-paper p-2.5"><div className="text-xl font-bold tabular-nums">{reviewRows.length - carriedCount}</div><div className="text-[11px] text-muted">Changed in this update{carriedCount ? ` · ${carriedCount} carried` : ""}</div></div>
                 <div className="rounded-lg bg-paper p-2.5"><div className="text-xl font-bold tabular-nums">{leftEmpty}</div><div className="text-[11px] text-muted">Left empty (not published)</div></div>
               </div>
             </div>
@@ -514,7 +538,7 @@ export function StockEntryGrid({ report, items: initialItems, initialEntries, ti
                         {r.code && <div className="mt-0.5 font-mono text-[11px] text-graphite-400 [overflow-wrap:anywhere] sm:hidden">{r.code}</div>}
                       </td>
                       <td className="hidden sm:table-cell">{r.code ? <span className="tag tag-code">{r.code}</span> : <span className="text-graphite-300">—</span>}</td>
-                      <td className={`text-right font-bold tabular-nums ${Number(r.qty) === 0 ? "text-warn" : ""}`}>{formatQty(r.qty)}<div className="text-[11px] font-medium text-accent sm:hidden">{r.unit}</div></td>
+                      <td className={`text-right font-bold tabular-nums ${Number(r.qty) === 0 ? "text-warn" : ""}`}>{formatQty(r.qty)}{r.carried && <div className="text-[10px] font-medium text-graphite-400">carried</div>}<div className="text-[11px] font-medium text-accent sm:hidden">{r.unit}</div></td>
                       <td className="hidden sm:table-cell"><span className="tag tag-unit">{r.unit}</span></td>
                     </tr>
                   ))}
@@ -531,7 +555,7 @@ export function StockEntryGrid({ report, items: initialItems, initialEntries, ti
             </div>
 
             <div className="flex flex-col gap-3 border-t border-line p-4 sm:flex-row sm:items-center sm:justify-between sm:px-6">
-              <p className="text-[12px] text-muted">Publishing makes this the single official report for this date, visible to the customer. Submitted by <b className="text-ink">{userName}</b>.</p>
+              <p className="text-[12px] text-muted">Publishing makes this the official {slotLabel(report.slot_hour)} stock update, visible to the customer. Submitted by <b className="text-ink">{userName}</b>.</p>
               <div className="flex shrink-0 justify-end gap-2">
                 <button onClick={() => setConfirming(false)} className="btn btn-secondary" disabled={submitting}>Back to editing</button>
                 <button onClick={submit} className="btn btn-primary" disabled={submitting}>

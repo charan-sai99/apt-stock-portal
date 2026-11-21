@@ -53,10 +53,10 @@ export async function refreshEntriesAction(reportId: string): Promise<Result<{ e
     const supabase = await createClient();
     const [{ data: report, error: rErr }, { data: entries, error: eErr }] = await Promise.all([
       supabase.from("daily_reports").select("version,status").eq("id", reportId).single(),
-      supabase.from("daily_stock_entries").select("zoho_item_id,available_quantity,revision,updated_at,updated_by_name").eq("report_id", reportId),
+      supabase.from("daily_stock_entries").select("zoho_item_id,available_quantity,revision,updated_at,updated_by_name,value_updated_at,value_updated_by_name,carried_from_report_id").eq("report_id", reportId),
     ]);
     if (rErr || eErr) return { ok: false, error: (rErr ?? eErr)!.message };
-    return { ok: true, data: { entries: (entries ?? []) as EntryState[], version: report.version, status: report.status } };
+    return { ok: true, data: { entries: (entries ?? []).map((e: any) => ({ ...e, carried: e.carried_from_report_id !== null })) as EntryState[], version: report.version, status: report.status } };
   } catch (e) {
     return { ok: false, error: e instanceof Error ? e.message : "Refresh failed." };
   }

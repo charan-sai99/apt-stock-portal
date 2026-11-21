@@ -40,6 +40,7 @@ export async function resetDatabase() {
     "supabase/migrations/0006_manual_items.sql",
     "supabase/migrations/0007_admin_permanent_delete.sql",
     "supabase/migrations/0008_admin_delete_users.sql",
+    "supabase/migrations/0009_hourly_updates.sql",
     "supabase/seed/zoho_items_seed.sql",
   ]) {
     await c.query(readFileSync(join(root, f), "utf8"));

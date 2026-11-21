@@ -26,6 +26,9 @@ export type EntryState = {
   revision: number;
   updated_at: string;
   updated_by_name: string | null;
+  value_updated_at?: string | null;
+  value_updated_by_name?: string | null;
+  carried?: boolean;
 };
 
 export type Conflict = {
@@ -50,9 +53,17 @@ export type PortalSummary = {
   factory_today: string;
   reportable_items: number;
   items_missing_unit: number;
+  latest_published_id: string | null;
   latest_published_date: string | null;
+  latest_published_slot: number | null;
   latest_published_at: string | null;
   latest_amended_at: string | null;
+  entry_open_hour: number;
+  entry_close_hour: number;
+  entry_interval_hours: number;
+  current_slot_date: string | null;
+  current_slot_hour: number | null;
+  current_slot_closes_at: string | null;
 };
 
 export type PublishedStockRow = {
