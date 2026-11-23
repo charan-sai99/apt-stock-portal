@@ -64,6 +64,56 @@ export type PortalSummary = {
   current_slot_date: string | null;
   current_slot_hour: number | null;
   current_slot_closes_at: string | null;
+  parts_counted_today: number;
+  parts_ever_counted: number;
+  counts_today: number;
+  last_count_at: string | null;
+};
+
+export type BoardItem = {
+  zoho_item_id: string;
+  item_name: string;
+  part_code: string | null;
+  sku: string | null;
+  description: string | null;
+  unit: string | null;
+  unit_needs_review: boolean;
+  item_source: string;
+  count_id: number | null;
+  quantity: number | string | null;
+  counted_at: string | null;
+  counted_by: string | null;
+  counted_by_name: string | null;
+  counted_created_at: string | null;
+  corrected_at: string | null;
+};
+
+export type CountRow = {
+  id: number;
+  zoho_item_id: string;
+  item_name: string;
+  part_code: string | null;
+  quantity: number | string;
+  unit: string;
+  counted_at: string;
+  counted_by: string;
+  counted_by_name: string | null;
+  created_at: string;
+  corrected_at: string | null;
+  corrected_by_name: string | null;
+  correction_count: number;
+};
+
+export type CustomerStockRow = {
+  zoho_item_id: string;
+  item_name: string;
+  part_code: string | null;
+  sku: string | null;
+  description: string | null;
+  unit: string;
+  quantity: number | string;
+  counted_at: string;
+  counted_today: boolean;
 };
 
 export type PublishedStockRow = {

@@ -584,3 +584,120 @@ describe("Hourly updates (0009)", () => {
     await expect(db.as(op1, "select ensure_update(current_date, 1::smallint, $1)", [op1])).rejects.toThrow(/permission denied/);
   });
 });
+
+describe("Quick entry — live stock counts (0010)", () => {
+  let part: string, part2: string;
+  const rec = (uid: string, item: string, qty: string, seen: number | null = null, force = false) =>
+    db.as(uid, "select public.record_count($1,$2,$3,$4) r", [item, qty, seen, force]).then((x) => x[0].r);
+  const asMaint = async (sql: string, params: unknown[] = []) => {
+    await db.super("begin"); await db.super("select set_config('app.operation','maintenance',true)");
+    await db.super(sql, params); await db.super("commit");
+  };
+
+  beforeAll(async () => {
+    const rows = await db.super("select zoho_item_id from zoho_items where unit is not null and item_source='zoho' and include_in_stock order by zoho_item_id limit 2");
+    part = rows[0].zoho_item_id; part2 = rows[1].zoho_item_id;
+  });
+
+  it("an operator's count is visible to the customer immediately, without staff identities", async () => {
+    const r = await rec(op1, part, "1240");
+    expect(r.status).toBe("saved");
+    const rows = await db.as(customer, "select * from public.customer_stock() where zoho_item_id=$1", [part]);
+    expect(Number(rows[0].quantity)).toBe(1240);
+    expect(rows[0].counted_today).toBe(true);
+    expect(Object.keys(rows[0]).some((k) => /by|user|name_by/.test(k))).toBe(false);
+    const [board] = await db.as(op2, "select * from public.stock_board() where zoho_item_id=$1", [part]);
+    expect(board.counted_by_name).toBe("Operator One");
+    const [log] = await db.as(admin, "select * from audit_logs where operation='stock_count' and zoho_item_id=$1 order by id desc limit 1", [part]);
+    expect(Number(log.new_quantity)).toBe(1240);
+    expect(log.actor_name).toBe("Operator One");
+  });
+
+  it("validates quantities and parts; zero is accepted", async () => {
+    expect((await rec(op1, part2, "0")).status).toBe("saved");
+    await expect(rec(op1, part2, "-1")).rejects.toThrow(/negative/);
+    await expect(rec(op1, part2, "abc")).rejects.toThrow(/valid number/);
+    await db.super("insert into zoho_items(zoho_item_id,item_name,unit,unit_needs_review,product_type,zoho_status) values ('NOUNIT-1','No unit part',null,true,'goods','Active')");
+    await expect(rec(op1, "NOUNIT-1", "5")).rejects.toThrow(/no unit/);
+    await expect(rec(op1, "SVC-1", "5")).rejects.toThrow(/not in the stock catalogue/);
+  });
+
+  it("asks for confirmation if someone else counted the same part in the last 10 minutes", async () => {
+    const first = await rec(op2, part, "1250");
+    expect(first.status).toBe("confirm");
+    expect(first.latest.counted_by_name).toBe("Operator One");
+    expect(Number(first.latest.quantity)).toBe(1240);
+    const seen = await rec(op2, part, "1250", first.latest.id);
+    expect(seen.status).toBe("saved");
+    const forced = await rec(op1, part, "1260", null, true);
+    expect(forced.status).toBe("saved");
+    const [cur] = await db.as(customer, "select quantity from public.customer_stock() where zoho_item_id=$1", [part]);
+    expect(Number(cur.quantity)).toBe(1260);
+  });
+
+  it("operators correct their own entry within 10 minutes only; admin amends with a reason", async () => {
+    const r = await rec(op1, part2, "15", null, true);
+    const id = r.count.id;
+    await expect(db.as(op2, "select public.correct_count($1,'16')", [id])).rejects.toThrow(/own entry within 10 minutes/);
+    await db.as(op1, "select public.correct_count($1,'16')", [id]);
+    const [c1] = await db.super("select quantity, correction_count from stock_counts where id=$1", [id]);
+    expect([Number(c1.quantity), c1.correction_count]).toEqual([16, 1]);
+    await asMaint("update stock_counts set created_at = now() - interval '11 minutes' where id=$1", [id]);
+    await expect(db.as(op1, "select public.correct_count($1,'17')", [id])).rejects.toThrow(/own entry within 10 minutes/);
+    await expect(db.as(admin, "select public.correct_count($1,'17')", [id])).rejects.toThrow(/reason/);
+    await db.as(admin, "select public.correct_count($1,'17','Recount by supervisor')", [id]);
+    const ops = await db.as(admin, "select operation, old_quantity, new_quantity, details from audit_logs where entity_type='stock_count' and entity_id=$1 order by id", [String(id)]);
+    expect(ops.map((o: any) => o.operation)).toEqual(["stock_count", "count_correction", "amendment"]);
+    expect(Number(ops[2].old_quantity)).toBe(16);
+    expect(ops[2].details.reason).toBe("Recount by supervisor");
+  });
+
+  it("customers cannot write or read raw counts; nobody can edit counts outside the functions", async () => {
+    await expect(rec(customer, part, "1")).rejects.toThrow(/permission/);
+    expect(await db.as(customer, "select * from stock_counts")).toHaveLength(0);
+    await expect(db.as(customer, "select public.counts_on_day()")).rejects.toThrow(/permission/);
+    await expect(db.as(op1, "update stock_counts set quantity = 1")).rejects.toThrow(/permission denied/);
+    await expect(db.super("update stock_counts set quantity = 1")).rejects.toThrow(/only be changed through the portal/);
+    await expect(db.super("delete from stock_counts")).rejects.toThrow(/only be changed through the portal/);
+  });
+
+  it("stock 'as of' a time uses the count valid then; old counts are flagged as not today", async () => {
+    const [old] = await db.super("select id from stock_counts where zoho_item_id=$1 order by counted_at, id limit 1", [part]);
+    await asMaint("update stock_counts set counted_at = now() - interval '2 days' where id=$1", [old.id]);
+    const [then] = await db.as(customer, "select quantity, counted_today from public.customer_stock(now() - interval '1 day') where zoho_item_id=$1", [part]);
+    expect(Number(then.quantity)).toBe(1240);
+    expect(then.counted_today).toBe(false);
+    const [only] = await db.super("select id from stock_counts where zoho_item_id=$1 order by id desc limit 1", [part2]);
+    await asMaint("update stock_counts set counted_at = now() - interval '1 day' where zoho_item_id=$1", [part2]);
+    const [stale] = await db.as(customer, "select counted_today from public.customer_stock() where zoho_item_id=$1", [part2]);
+    expect(stale.counted_today).toBe(false);
+    expect(only.id).toBeDefined();
+    const hist = await db.as(customer, "select * from public.count_history($1)", [part]);
+    expect(hist.length).toBeGreaterThanOrEqual(3);
+    expect(Object.keys(hist[0]).sort()).toEqual(["corrected", "counted_at", "quantity", "unit"]);
+  });
+
+  it("admin can delete a count (audited); a new part can be added with its count", async () => {
+    const r = await rec(admin, part2, "99", null, true);
+    await db.as(admin, "select public.admin_delete_count($1,'Typed into wrong part')", [r.count.id]);
+    expect(await db.super("select 1 from stock_counts where id=$1", [r.count.id])).toHaveLength(0);
+    const [del] = await db.as(admin, "select details from audit_logs where action='count_deleted' and entity_id=$1", [String(r.count.id)]);
+    expect(del.details.reason).toBe("Typed into wrong part");
+
+    const [m] = await db.as(op1, "select public.add_manual_item_count('QUICK NEW PART','QN-001','pcs','30') r");
+    expect(m.r.status).toBe("saved");
+    const [vis] = await db.as(customer, "select quantity from public.customer_stock() where zoho_item_id=$1", [m.r.zoho_item_id]);
+    expect(Number(vis.quantity)).toBe(30);
+    await expect(db.as(op1, "select public.add_manual_item_count('quick new part',null,'pcs','1')")).rejects.toThrow(/already exists/);
+    const [del2] = await db.as(admin, "select public.admin_delete_manual_item($1,'Test part only') r", [m.r.zoho_item_id]);
+    expect(del2.r.lines_deleted).toBe(1);
+  });
+
+  it("summary counts today's coverage; users with counts cannot be deleted", async () => {
+    const [s] = await db.as(op1, "select public.portal_summary() s");
+    expect(s.s.parts_counted_today).toBeGreaterThanOrEqual(1);
+    expect(s.s.entry_open_hour).toBeDefined();
+    const [h] = await db.as(admin, "select public.admin_user_history($1) h", [op1]);
+    expect(h.h.can_delete).toBe(false);
+  });
+});

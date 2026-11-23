@@ -29,3 +29,17 @@ describe("exports", () => {
     expect(ws.getRow(4).getCell(2).value).toBe(12);
   });
 });
+
+import { countTime, endOfFactoryDayIso, factoryDate } from "@/lib/format";
+describe("factory-day helpers", () => {
+  it("end of a factory day in IST is 18:29:59.999 UTC", () => {
+    expect(endOfFactoryDayIso("2026-11-23", "Asia/Kolkata")).toBe("2026-11-23T18:29:59.999Z");
+  });
+  it("factory date of an instant", () => {
+    expect(factoryDate("2026-11-23T19:00:00Z", "Asia/Kolkata")).toBe("2026-11-24");
+  });
+  it("count time shows only the clock for today, date + clock otherwise", () => {
+    expect(countTime("2026-11-24T04:30:00Z", "Asia/Kolkata", "2026-11-24")).toBe("10:00");
+    expect(countTime("2026-11-23T04:30:00Z", "Asia/Kolkata", "2026-11-24")).toMatch(/23 Nov.*10:00/);
+  });
+});

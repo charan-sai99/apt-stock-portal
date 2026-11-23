@@ -2,7 +2,7 @@ import { NextResponse, type NextRequest } from "next/server";
 import { getProfile } from "@/lib/auth";
 import { buildAuditQuery } from "@/lib/audit-query";
 import { toCsv, toXlsx, type Column } from "@/lib/export";
-import { formatDateTime, slotLabel } from "@/lib/format";
+import { endOfFactoryDayIso, formatDateTime, slotLabel } from "@/lib/format";
 import { createClient } from "@/lib/supabase/server";
 
 export const dynamic = "force-dynamic";
@@ -34,7 +34,47 @@ export async function GET(request: NextRequest) {
   let name = "export";
   let title = "";
 
-  if (kind === "stock") {
+  if (kind === "current") {
+    const asOf = validDate && date < (summary as any)?.factory_today ? date : null;
+    const { data, error } = await supabase.rpc("customer_stock", { p_as_of: asOf ? endOfFactoryDayIso(asOf, tz) : null });
+    if (error) return NextResponse.json({ error: error.message }, { status: 400 });
+    rows = data ?? [];
+    const label = asOf ?? `${(summary as any)?.factory_today}`;
+    name = asOf ? `APT-stock-as-of-${asOf}` : `APT-stock-${label}`;
+    title = asOf
+      ? `Axis Plastics Transition — stock as of end of ${asOf} (times in ${tz})`
+      : `Axis Plastics Transition — current stock, exported ${ts(new Date().toISOString())} (${tz})`;
+    columns = [
+      { header: "Part name", value: (r) => r.item_name, width: 48 },
+      { header: "Part code", value: (r) => r.part_code, width: 22 },
+      { header: "SKU", value: (r) => r.sku },
+      { header: "Available quantity", value: (r) => Number(r.quantity) },
+      { header: "Unit", value: (r) => r.unit, width: 8 },
+      { header: `Counted at (${tz})`, value: (r) => ts(r.counted_at), width: 24 },
+      { header: asOf ? "Counted that day" : "Counted today", value: (r) => (r.counted_today ? "Yes" : "No"), width: 14 },
+      { header: "Zoho item ID", value: (r) => r.zoho_item_id, width: 20 },
+    ];
+  } else if (kind === "counts") {
+    if (profile.role === "customer") return forbid();
+    if (!validDate) return NextResponse.json({ error: "date required" }, { status: 400 });
+    const { data, error } = await supabase.rpc("counts_on_day", { p_date: date });
+    if (error) return NextResponse.json({ error: error.message }, { status: 400 });
+    rows = data ?? [];
+    name = `APT-count-log-${date}`;
+    title = `Stock count log — ${date} — times in ${tz}`;
+    columns = [
+      { header: `Counted at (${tz})`, value: (r) => ts(r.counted_at), width: 24 },
+      { header: "Part name", value: (r) => r.item_name, width: 48 },
+      { header: "Part code", value: (r) => r.part_code, width: 22 },
+      { header: "Quantity", value: (r) => Number(r.quantity) },
+      { header: "Unit", value: (r) => r.unit, width: 8 },
+      { header: "Counted by", value: (r) => r.counted_by_name, width: 20 },
+      { header: "Corrections", value: (r) => r.correction_count, width: 12 },
+      { header: "Last corrected by", value: (r) => r.corrected_by_name, width: 20 },
+      { header: `Last corrected at (${tz})`, value: (r) => ts(r.corrected_at), width: 24 },
+      { header: "Zoho item ID", value: (r) => r.zoho_item_id, width: 20 },
+    ];
+  } else if (kind === "stock") {
     let reportId = validReport ? reportParam : "";
     let rDate = date, rSlot = 0;
     if (validReport) {

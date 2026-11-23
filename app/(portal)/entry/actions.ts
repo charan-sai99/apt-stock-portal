@@ -3,78 +3,65 @@
 import { revalidatePath } from "next/cache";
 import { assertRole } from "@/lib/auth";
 import { createClient } from "@/lib/supabase/server";
-import type { EntryState, SaveResult } from "@/lib/types";
+import { checkQuantity } from "@/lib/validation";
+import type { BoardItem, CountRow } from "@/lib/types";
 
-type DraftInput = { zoho_item_id: string; quantity: string; expected_revision: number };
 type Result<T> = { ok: true; data: T } | { ok: false; error: string };
+const fail = (e: unknown, fallback: string) => ({ ok: false as const, error: e instanceof Error ? e.message : fallback });
 
-const isUuid = (s: unknown) => typeof s === "string" && /^[0-9a-f-]{36}$/i.test(s);
+export type RecordResult =
+  | { status: "saved"; count: { id: number; zoho_item_id: string; quantity: string | number; unit: string; counted_at: string; counted_by: string; counted_by_name: string | null; previous_quantity: string | number | null } }
+  | { status: "confirm"; latest: { id: number; quantity: string | number; unit: string; counted_at: string; counted_by_name: string | null } };
 
-export async function saveDraftAction(reportId: string, entries: DraftInput[]): Promise<Result<SaveResult>> {
+export async function recordCountAction(zohoItemId: string, quantity: string, seenCountId: number | null, force: boolean): Promise<Result<RecordResult>> {
   try {
     await assertRole(["admin", "operator"]);
-    if (!isUuid(reportId) || !Array.isArray(entries) || entries.length === 0 || entries.length > 2000) {
-      return { ok: false, error: "Invalid request." };
-    }
-    const clean = entries.map((e) => ({
-      zoho_item_id: String(e.zoho_item_id),
-      quantity: String(e.quantity),
-      expected_revision: Number.isInteger(e.expected_revision) ? e.expected_revision : -1,
-    }));
+    const q = checkQuantity(quantity);
+    if (!q.ok) return { ok: false, error: q.error };
     const supabase = await createClient();
-    const { data, error } = await supabase.rpc("save_draft_entries", { p_report_id: reportId, p_entries: clean });
-    if (error) return { ok: false, error: error.message };
-    return { ok: true, data: data as SaveResult };
-  } catch (e) {
-    return { ok: false, error: e instanceof Error ? e.message : "Save failed." };
-  }
-}
-
-export async function submitReportAction(reportId: string, expectedVersion: number): Promise<Result<{ report_date: string }>> {
-  try {
-    await assertRole(["admin", "operator"]);
-    if (!isUuid(reportId) || !Number.isInteger(expectedVersion)) return { ok: false, error: "Invalid request." };
-    const supabase = await createClient();
-    const { data, error } = await supabase.rpc("submit_report", { p_report_id: reportId, p_expected_version: expectedVersion }).single<{ report_date: string }>();
-    if (error) return { ok: false, error: error.message };
-    revalidatePath("/entry");
-    revalidatePath("/stock");
-    revalidatePath("/reports");
-    return { ok: true, data: { report_date: data.report_date } };
-  } catch (e) {
-    return { ok: false, error: e instanceof Error ? e.message : "Submission failed." };
-  }
-}
-
-export async function refreshEntriesAction(reportId: string): Promise<Result<{ entries: EntryState[]; version: number; status: string }>> {
-  try {
-    await assertRole(["admin", "operator"]);
-    if (!isUuid(reportId)) return { ok: false, error: "Invalid request." };
-    const supabase = await createClient();
-    const [{ data: report, error: rErr }, { data: entries, error: eErr }] = await Promise.all([
-      supabase.from("daily_reports").select("version,status").eq("id", reportId).single(),
-      supabase.from("daily_stock_entries").select("zoho_item_id,available_quantity,revision,updated_at,updated_by_name,value_updated_at,value_updated_by_name,carried_from_report_id").eq("report_id", reportId),
-    ]);
-    if (rErr || eErr) return { ok: false, error: (rErr ?? eErr)!.message };
-    return { ok: true, data: { entries: (entries ?? []).map((e: any) => ({ ...e, carried: e.carried_from_report_id !== null })) as EntryState[], version: report.version, status: report.status } };
-  } catch (e) {
-    return { ok: false, error: e instanceof Error ? e.message : "Refresh failed." };
-  }
-}
-
-export async function addManualItemAction(
-  reportId: string, name: string, partCode: string, unit: string, quantity: string,
-): Promise<Result<{ item: import("@/lib/types").CatalogueItem; entry: EntryState; report_version: number }>> {
-  try {
-    await assertRole(["admin", "operator"]);
-    if (!isUuid(reportId)) return { ok: false, error: "Invalid request." };
-    const supabase = await createClient();
-    const { data, error } = await supabase.rpc("add_manual_item", {
-      p_report_id: reportId, p_name: String(name), p_part_code: String(partCode ?? ""), p_unit: String(unit), p_quantity: String(quantity),
+    const { data, error } = await supabase.rpc("record_count", {
+      p_zoho_item_id: String(zohoItemId), p_quantity: q.value, p_seen_count_id: seenCountId, p_force: force,
     });
     if (error) return { ok: false, error: error.message };
-    return { ok: true, data: data as { item: import("@/lib/types").CatalogueItem; entry: EntryState; report_version: number } };
-  } catch (e) {
-    return { ok: false, error: e instanceof Error ? e.message : "Could not add the item." };
-  }
+    if ((data as RecordResult).status === "saved") { revalidatePath("/stock"); revalidatePath("/register"); }
+    return { ok: true, data: data as RecordResult };
+  } catch (e) { return fail(e, "Could not save."); }
+}
+
+export async function correctCountAction(countId: number, quantity: string, reason?: string): Promise<Result<null>> {
+  try {
+    await assertRole(["admin", "operator"]);
+    const q = checkQuantity(quantity);
+    if (!q.ok) return { ok: false, error: q.error };
+    const supabase = await createClient();
+    const { error } = await supabase.rpc("correct_count", { p_count_id: countId, p_quantity: q.value, p_reason: reason ?? null });
+    if (error) return { ok: false, error: error.message };
+    revalidatePath("/stock"); revalidatePath("/register");
+    return { ok: true, data: null };
+  } catch (e) { return fail(e, "Could not correct."); }
+}
+
+export async function addManualItemCountAction(name: string, partCode: string, unit: string, quantity: string): Promise<Result<{ zoho_item_id: string }>> {
+  try {
+    await assertRole(["admin", "operator"]);
+    const q = checkQuantity(quantity);
+    if (!q.ok) return { ok: false, error: q.error };
+    const supabase = await createClient();
+    const { data, error } = await supabase.rpc("add_manual_item_count", { p_name: name, p_part_code: partCode, p_unit: unit, p_quantity: q.value });
+    if (error) return { ok: false, error: error.message };
+    revalidatePath("/stock"); revalidatePath("/admin/catalogue");
+    return { ok: true, data: { zoho_item_id: (data as { zoho_item_id: string }).zoho_item_id } };
+  } catch (e) { return fail(e, "Could not add the part."); }
+}
+
+export async function boardAction(): Promise<Result<{ board: BoardItem[]; today: CountRow[] }>> {
+  try {
+    await assertRole(["admin", "operator"]);
+    const supabase = await createClient();
+    const [{ data: board, error: e1 }, { data: today, error: e2 }] = await Promise.all([
+      supabase.rpc("stock_board"), supabase.rpc("counts_on_day", { p_date: null }),
+    ]);
+    if (e1 || e2) return { ok: false, error: (e1 ?? e2)!.message };
+    return { ok: true, data: { board: (board ?? []) as BoardItem[], today: (today ?? []) as CountRow[] } };
+  } catch (e) { return fail(e, "Could not refresh."); }
 }

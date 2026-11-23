@@ -1,4 +1,6 @@
 export const OPERATION_LABELS: Record<string, { label: string; tone: string }> = {
+  stock_count: { label: "Stock counted", tone: "tag-ok" },
+  count_correction: { label: "Corrected (own)", tone: "tag-warn" },
   draft_entry: { label: "Quantity entered", tone: "tag-ok" },
   draft_update: { label: "Quantity changed", tone: "tag-warn" },
   amendment: { label: "Amendment", tone: "tag-unit" },

@@ -2,29 +2,19 @@
 
 import { useRouter } from "next/navigation";
 import { CalendarDays } from "lucide-react";
-import { formatDate, slotLabel } from "@/lib/format";
 
-type U = { id: string; date: string; slot: number; status: string };
-
-export function DatePicker({ updates, selected }: { updates: U[]; selected: string }) {
+export function DatePicker({ selected, today }: { selected: string | null; today: string }) {
   const router = useRouter();
-  const byDate = new Map<string, U[]>();
-  updates.forEach((u) => byDate.set(u.date, [...(byDate.get(u.date) ?? []), u]));
   return (
-    <label className="flex items-center gap-2 rounded-lg border border-line bg-white pl-3 text-sm">
-      <CalendarDays size={15} className="text-accent" />
-      <span className="sr-only">Stock update</span>
-      <select value={selected} onChange={(e) => router.push(`/stock?u=${e.target.value}`)} className="h-10 max-w-[16rem] rounded-r-lg bg-transparent pr-3 font-semibold outline-none">
-        {[...byDate.entries()].map(([date, list]) => (
-          <optgroup key={date} label={formatDate(date, { weekday: "short" })}>
-            {list.map((u) => (
-              <option key={u.id} value={u.id}>
-                {formatDate(date, { day: "2-digit", month: "short", year: undefined })} · {slotLabel(u.slot)}{u.id === updates[0].id ? " — latest" : ""}{u.status === "amended" ? " (corrected)" : ""}
-              </option>
-            ))}
-          </optgroup>
-        ))}
-      </select>
-    </label>
+    <div className="flex items-center gap-2">
+      <label className="flex items-center gap-2 rounded-lg border border-line bg-white pl-3 text-sm">
+        <CalendarDays size={15} className="text-accent" />
+        <span className="text-muted">Stock as of</span>
+        <input type="date" value={selected ?? today} max={today}
+          onChange={(e) => router.push(e.target.value && e.target.value < today ? `/stock?date=${e.target.value}` : "/stock")}
+          className="h-10 rounded-r-lg bg-transparent pr-3 font-semibold outline-none" aria-label="Show stock as of date" />
+      </label>
+      {selected && <button onClick={() => router.push("/stock")} className="btn btn-secondary">Now</button>}
+    </div>
   );
 }

@@ -142,7 +142,7 @@ npx supabase db push
 
 ### 5.3 Apply migrations — option B: SQL editor
 
-Paste and run, in order, only the files not yet applied: `0001_initial_schema.sql`, `0002_entry_timestamps_and_manager_audit.sql`, `0003_production_hardening.sql`, `0004_explicit_table_grants.sql`, `0005_allow_partial_reports.sql`, `0006_manual_items.sql`, `0007_admin_permanent_delete.sql`, `0008_admin_delete_users.sql`, `0009_hourly_updates.sql`.
+Paste and run, in order, only the files not yet applied: `0001_initial_schema.sql`, `0002_entry_timestamps_and_manager_audit.sql`, `0003_production_hardening.sql`, `0004_explicit_table_grants.sql`, `0005_allow_partial_reports.sql`, `0006_manual_items.sql`, `0007_admin_permanent_delete.sql`, `0008_admin_delete_users.sql`, `0009_hourly_updates.sql`, `0010_quick_entry_stock_counts.sql`.
 
 ### 5.4 Load the catalogue
 
@@ -228,7 +228,7 @@ What these tests do **not** prove: real Supabase Auth sign-in and PostgREST beha
 ## 9. Go-live checklist
 
 - [ ] `check_existing_schema.sql` reviewed; backup taken if data existed
-- [ ] Migrations 0001–0009 applied
+- [ ] Migrations 0001–0010 applied
 - [ ] Entry hours set under Admin → Entry hours (default 08:00–20:00, hourly)
 - [ ] Test data cleared with `supabase/reset_fresh_start.sql` (wipes reports, lines, amendments, audit log; keeps catalogue, units, users)
 - [ ] Public sign-ups disabled in Supabase Auth
@@ -245,7 +245,8 @@ What these tests do **not** prove: real Supabase Auth sign-in and PostgREST beha
 
 - **Roles**: database roles stay `admin` / `operator` / `customer` (compatible with 0001); STOCK_OPERATOR_1/2 are `operator` + `operator_slot` 1/2, unique among active operators.
 - **One report per factory date** (`daily_reports.report_date` unique). Operators can edit/submit only today's draft (factory timezone); the admin can amend any published report.
-- **Hourly stock updates** (owner decision, 21 Nov 2026, migration 0009): instead of one report per day, operators publish an update per interval (admin sets opening hour, closing hour and interval). Operators can edit only the update whose window is open now. A new update starts with the quantities of the latest published update of the same day carried forward, keeping each part's original "last changed" time; the first update of a day starts empty so yesterday's stock is never shown as today's. Customers see the latest update and can browse earlier ones.
+- **Quick entry — live stock counts** (owner decision, 23 Nov 2026, migration 0010; replaces hourly updates for day-to-day use): no time limits while the team moves from paper. An operator picks a part, enters the counted quantity, confirms and saves; the customer sees it immediately with the count time. Every count is a permanent row in `stock_counts`; current stock = latest count per part, and "stock as of" any date is derived. Operators can correct their own count within 10 minutes; afterwards the admin amends (reason required) or deletes it. If someone else counted the same part in the last 10 minutes, saving asks for confirmation. Customers see each part's count time; parts not counted today are greyed. Earlier daily/hourly report data stays readable.
+- **Hourly stock updates** (21 Nov 2026, migration 0009; superseded for daily use by quick entry): instead of one report per day, operators publish an update per interval (admin sets opening hour, closing hour and interval). Operators can edit only the update whose window is open now. A new update starts with the quantities of the latest published update of the same day carried forward, keeping each part's original "last changed" time; the first update of a day starts empty so yesterday's stock is never shown as today's. Customers see the latest update and can browse earlier ones.
 - **Partial reports are allowed** (owner decision, 21 Nov 2026, migration 0005). Operators may leave quantities empty; a report needs at least one saved quantity to publish. Empty parts are not part of that day's published report and are not shown to the customer.
 - **Operators can add a part that is not in the catalogue** (migration 0006): name, part code, unit and quantity. It gets a `MANUAL-…` ID, is saved into today's draft and kept in the catalogue, and is listed under *Catalogue & units → Added manually* for the admin to review (e.g. exclude it once the real item arrives from Zoho). Exact duplicates of existing names/part codes are refused.
 - **Admin permanent delete** (owner decision, migration 0007): the admin can permanently delete a whole report (type the date to confirm), a single line, or a manually added part, each with a mandatory reason. The data is erased; one audit line (who, when, what, reason) is kept. The audit log itself can never be deleted, and outside these three functions all delete protections remain.
